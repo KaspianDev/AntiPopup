@@ -18,14 +18,17 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
-configurations {
-    all {
-        exclude group: 'net.kyori'
-    }
-}
+
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
-    implementation('com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT')
+    implementation 'com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT'
+    implementation 'dev.dejvokep:boosted-yaml-spigot:1.2'
+}
+
+configurations {
+    all {
+        exclude group: 'net.kyori', module: ''
+    }
 }
 
 tasks {
@@ -33,8 +36,10 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
+        minimize()
         relocate("io.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.io.github.retrooper.packetevents")
         relocate("com.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.com.github.retrooper.packetevents")
+        relocate("dev.dejvokep.boostedyaml", "screw.microsoft.antipopup.libs.dev.dejvokep.boostedyaml")
     }
 }
 
