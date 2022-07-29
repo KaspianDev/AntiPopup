@@ -1,0 +1,7 @@
+name: AntiPopup
+version: '${version}'
+main: screw.microsoft.antipopup.AntiPopup
+api-version: 1.19
+load: POSTWORLD
+authors: [ Kaspian ]
+description: A plugin that removed annoying unsafe server popup.
