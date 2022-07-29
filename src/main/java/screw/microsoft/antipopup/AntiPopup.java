@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public final class AntiPopup extends JavaPlugin {
 
-    public static YamlDocument config;
+    static YamlDocument config;
 
     @Override
     public void onLoad() {
@@ -38,6 +38,7 @@ public final class AntiPopup extends JavaPlugin {
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"))
                             .build());
+            getLogger().info("Config enabled.");
         } catch (IOException ex) {
             getLogger().warning("Config file could not be initialized");
             throw new RuntimeException(ex);

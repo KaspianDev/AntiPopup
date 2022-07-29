@@ -8,7 +8,7 @@ version = '1'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
     maven {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
@@ -21,14 +21,12 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
-    implementation 'com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT'
+    implementation 'com.github.retrooper.packetevents:spigot:2.0.0-SNAPSHOT'
     implementation 'dev.dejvokep:boosted-yaml-spigot:1.2'
 }
 
-configurations {
-    all {
-        exclude group: 'net.kyori', module: ''
-    }
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 
 tasks {
