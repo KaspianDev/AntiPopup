@@ -1,5 +1,7 @@
 package screw.microsoft.antipopup;
 
+import java.util.UUID;
+
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
@@ -8,8 +10,6 @@ import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_19
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
-
-import java.util.UUID;
 
 public class PacketEventsListener extends PacketListenerAbstract {
 
@@ -24,18 +24,15 @@ public class PacketEventsListener extends PacketListenerAbstract {
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-            && AntiPopup.config.getBoolean("strip-signature", true).equals(true)) {
-                WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
-                final ChatMessage message = chatMessage.getMessage();
-                if (message instanceof ChatMessage_v1_19_1 v1_19_1) {
-                    v1_19_1.setSalt(0);
-                    v1_19_1.setSenderUUID(new UUID(0L, 0L));
-                    v1_19_1.setPreviousSignature(null);
-                    v1_19_1.setSignature(new byte[]{0});
-                }
+                && AntiPopup.config.getBoolean("strip-signature", true).equals(true)) {
+            WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
+            final ChatMessage message = chatMessage.getMessage();
+            if (message instanceof ChatMessage_v1_19_1 v1_19_1) {
+                v1_19_1.setSalt(0);
+                v1_19_1.setSenderUUID(new UUID(0L, 0L));
+                v1_19_1.setPreviousSignature(null);
+                v1_19_1.setSignature(new byte[] { 0 });
             }
         }
-
     }
 }
-
