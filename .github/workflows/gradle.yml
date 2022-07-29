@@ -1,6 +1,11 @@
 name: Java CI with Gradle
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - master
+      - feat/stripping
+  workflow_dispatch:
 
 jobs:
   build:
