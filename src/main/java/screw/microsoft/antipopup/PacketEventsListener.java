@@ -8,6 +8,7 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_19_1;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
 
@@ -19,7 +20,8 @@ public class PacketEventsListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
-        if (event.getPacketType() == PacketType.Play.Server.SERVER_DATA) {
+        if (event.getPacketType() == PacketType.Play.Server.SERVER_DATA
+                && event.getUser().getClientVersion().isNewerThan(ClientVersion.V_1_19)) {
             WrapperPlayServerServerData serverData = new WrapperPlayServerServerData(event);
             serverData.setEnforceSecureChat(true);
         }
