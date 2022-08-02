@@ -1,5 +1,8 @@
-config-version: 1
+config-version: 2
 
 # Should we prevent messages from being reported?
 # Leave as yes until you have a different plugin stripping those.
 strip-signature: true
+
+# Do not touch this!
+first-run: true

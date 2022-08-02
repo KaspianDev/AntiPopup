@@ -43,7 +43,23 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().warning("Config file could not be initialized");
             throw new RuntimeException(ex);
         }
-        getLogger().info(String.valueOf(config.getBoolean("strip-signature")));
+        /*
+        if(config.getBoolean("first-run").equals(true)) {
+            try {
+                FileInputStream in=new FileInputStream("server.properties");
+                Properties props = new Properties();
+                props.load(in);
+                props.setProperty("enforce-secure-profile", String.valueOf(false));
+                in.close();
+                FileOutputStream out=new FileOutputStream("server.properties");
+                props.store(out, "");
+                out.close();
+                config.set("first-run", false);
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
+        */
     }
 
     @Override

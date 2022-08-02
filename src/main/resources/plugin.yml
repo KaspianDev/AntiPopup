@@ -1,7 +1,9 @@
 name: AntiPopup
 version: '${version}'
 main: screw.microsoft.antipopup.AntiPopup
-api-version: 1.19
+api-version: 1.17
 load: POSTWORLD
 authors: [ Kaspian ]
 description: A plugin that removed annoying unsafe server popup.
+libraries:
+  - "dev.dejvokep:boosted-yaml-spigot:1.3"
