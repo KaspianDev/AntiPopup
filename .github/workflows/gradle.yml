@@ -8,6 +8,7 @@ jobs:
   build:
 
     runs-on: ubuntu-20.04
+    if: "startsWith(!github.event.head_commit.message, '🔼')"
 
     steps:
     - uses: actions/checkout@v2.4.2
