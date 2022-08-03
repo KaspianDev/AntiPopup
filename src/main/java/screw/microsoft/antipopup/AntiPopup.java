@@ -43,6 +43,8 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().warning("Config file could not be initialized");
             throw new RuntimeException(ex);
         }
+
+        // To be added soon
         /*
         if(config.getBoolean("first-run").equals(true)) {
             try {
