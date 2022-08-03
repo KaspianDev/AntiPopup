@@ -32,6 +32,8 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
+        archiveName = 'AntiPopup.jar'
+
         minimize()
         relocate("io.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.io.github.retrooper.packetevents")
         relocate("com.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.com.github.retrooper.packetevents")
