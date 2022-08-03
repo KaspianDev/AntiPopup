@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Skip based on commit message
-      uses: veggiemonk/skip-commit@1.0.0
     - uses: actions/checkout@v2.4.2
     - name: Set up JDK 17
       uses: actions/setup-java@v3.4.1
