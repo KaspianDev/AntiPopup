@@ -24,16 +24,23 @@ jobs:
           
     - name: Build artifacts
       run: ./gradlew build
-      
+
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
     - uses: avakar/tag-and-release@v1
+      id: release
       with:
-        tag_name: ${{ github.sha }}
+        tag_name: ${{ steps.vars.outputs.sha_short }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
-      
-    - name: Create Release
-      uses: ncipollo/release-action@v1.10.0
+        
+    - name: Upload artifacts & release assets
+      uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
       with:
-        tag_name: ${{ github.sha }}
-        artifacts: build/libs/*-all.jar
-        name: Build ${{ github.sha }}
+        path: build/libs/AntiPopup.jar
+        release-upload-url: ${{ steps.release.outputs.upload_url }}
+        upload-release-files: true
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
