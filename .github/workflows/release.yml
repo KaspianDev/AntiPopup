@@ -2,6 +2,8 @@ name: Release
 
 on:
   push:
+    tags:
+    - '*'
   workflow_dispatch:
 
 jobs:
@@ -28,5 +30,6 @@ jobs:
     - name: Create Release
       uses: ncipollo/release-action@v1.10.0
       with:
+        tag_name: ${{ github.ref }}
         artifacts: build/libs/*-all.jar
         name: Build ${{ github.head_ref }}
