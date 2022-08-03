@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    tags:
-    - '*'
   workflow_dispatch:
 
 jobs:
@@ -26,6 +24,10 @@ jobs:
           
     - name: Build artifacts
       run: ./gradlew build
+      
+    - uses: avakar/tag-and-release@v1
+      with:
+        tag_name: ${{ github.ref }}
       
     - name: Create Release
       uses: ncipollo/release-action@v1.10.0
