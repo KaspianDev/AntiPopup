@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Release
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
 jobs:
   build:
 
+    if: "startsWith(github.event.head_commit.message, '🔼')"
     runs-on: ubuntu-20.04
-    if: "contains(github.event.head_commit.message, '🔼')"
 
     steps:
     - name: Skip based on commit message
@@ -27,7 +27,8 @@ jobs:
     - name: Build artifacts
       run: ./gradlew build
       
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3.1.0
+    - name: Create Release
+      uses: ncipollo/release-action@v1.10.0
       with:
-        path: build/libs/*-all.jar
+        artifact: build/libs/*-all.jar
+        name: Build ${{ github.head_ref }}
