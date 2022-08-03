@@ -28,5 +28,5 @@ jobs:
     - name: Create Release
       uses: ncipollo/release-action@v1.10.0
       with:
-        artifact: build/libs/*-all.jar
+        artifacts: build/libs/*-all.jar
         name: Build ${{ github.head_ref }}
