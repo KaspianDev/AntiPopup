@@ -28,6 +28,8 @@ jobs:
     - uses: avakar/tag-and-release@v1
       with:
         tag_name: ${{ github.ref }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       
     - name: Create Release
       uses: ncipollo/release-action@v1.10.0
