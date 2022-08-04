@@ -28,7 +28,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-                && AntiPopup.config.getBoolean("strip-signature", true).equals(true)) {
+                && AntiPopup.config.getBoolean("strip-signature", true)) {
             WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
             ChatMessage message = chatMessage.getMessage();
 
