@@ -3,7 +3,13 @@ version: '${version}'
 main: screw.microsoft.antipopup.AntiPopup
 api-version: 1.17
 load: POSTWORLD
-softdepend: [ViaVersion]
+softdepend:
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
 authors: [ Kaspian ]
 description: A plugin that removed annoying unsafe server popup.
 libraries:
