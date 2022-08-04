@@ -32,6 +32,7 @@ jobs:
       id: release
       with:
         tag_name: ${{ steps.vars.outputs.sha_short }}
+        draft: true
       env:
         GITHUB_TOKEN: ${{ github.token }}
         
