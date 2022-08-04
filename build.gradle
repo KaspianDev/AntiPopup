@@ -27,10 +27,6 @@ dependencies {
     implementation 'com.github.retrooper.packetevents:spigot:2.0.0-20220803.215428-20'
 }
 
-configurations.all {
-    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
-}
-
 tasks {
     build {
         dependsOn(shadowJar)
