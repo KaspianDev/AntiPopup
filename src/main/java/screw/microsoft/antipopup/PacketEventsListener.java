@@ -22,6 +22,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        System.out.println(event.getPacketType().toString());
         if (event.getPacketType() == PacketType.Play.Server.SERVER_DATA) {
             WrapperPlayServerServerData serverData = new WrapperPlayServerServerData(event);
             serverData.setEnforceSecureChat(true);
