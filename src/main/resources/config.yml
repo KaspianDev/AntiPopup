@@ -1,12 +1,8 @@
-config-version: 3
+config-version: 4
 
 # Should we prevent messages from being reported?
 # Leave as yes until you have a different plugin stripping those.
 strip-signature: true
-
-# Should we remove warning that shows up on paper servers on startup?
-# Make sure to read it carefully and then set this to true.
-remove-warning: false
 
 # Do not touch this!
 first-run: true

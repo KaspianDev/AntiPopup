@@ -17,7 +17,6 @@ import java.util.Objects;
 public final class AntiPopup extends JavaPlugin {
 
     static YamlDocument config;
-    static boolean isPaper;
 
     @Override
     public void onLoad() {
@@ -41,29 +40,9 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().warning("Config file could not be initialized");
             throw new RuntimeException(ex);
         }
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            if(!config.getBoolean("remove-warning")) {
-                getLogger().warning("------------------------------------");
-                getLogger().warning("!!! DO NOT REPORT THIS TO PAPER !!!");
-                getLogger().warning("You are using Paper or a fork of paper.");
-                getLogger().warning("Paper builds contain problems related to");
-                getLogger().warning("players getting kicked if player sends");
-                getLogger().warning("a message. Use spigot, or paper build 99");
-                getLogger().warning("until further notice. AntiPopup still works.");
-                getLogger().warning("Make sure to set enforce-secure-profile");
-                getLogger().warning("in server.properties to false.");
-                getLogger().warning("");
-                getLogger().warning("To remove this message, set remove-warning");
-                getLogger().warning("to true in config of AntiPopup.");
-                getLogger().warning("------------------------------------");
-            }
-                isPaper = true;
-            System.out.println(AntiPopup.isPaper);
-        } catch (ClassNotFoundException ignored) {}
-        System.out.println(AntiPopup.isPaper);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
+        System.out.println(PacketEvents.getAPI().getVersion());
         getLogger().info("Initiated PacketEvents");
 
         // To be added soon
