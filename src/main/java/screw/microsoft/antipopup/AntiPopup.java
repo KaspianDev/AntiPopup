@@ -1,6 +1,8 @@
 package screw.microsoft.antipopup;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.manager.server.VersionComparison;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -42,8 +44,20 @@ public final class AntiPopup extends JavaPlugin {
         }
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
-        System.out.println(PacketEvents.getAPI().getVersion());
         getLogger().info("Initiated PacketEvents");
+        if(PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
+            && !config.getBoolean("no-warning")) {
+            getLogger().warning("!!!              WARNING              !!!");
+            getLogger().warning("There is a known problem with using");
+            getLogger().warning("AntiPopup with ViaVersion on 1.19.");
+            getLogger().warning("Players will still get the popup, either");
+            getLogger().warning("wait for a fix or download a patched ViaVersion.");
+            getLogger().warning("You can also update your server to 1.19.1+.");
+            getLogger().warning("");
+            getLogger().warning("Patch: https://github.com/KaspianDev/ViaVersion-patched/actions");
+            getLogger().warning("Note: It is not ideal, I recommend just updating your server.");
+            getLogger().warning("Remove warning by setting no-warning to true in config.");
+        }
 
         // To be added soon
         /*

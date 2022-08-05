@@ -1,18 +1,15 @@
 package screw.microsoft.antipopup;
 
-import java.util.Arrays;
-import java.util.UUID;
-
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.protocol.chat.ChatType;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_19_1;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
+
+import java.util.UUID;
 
 public class PacketEventsListener extends PacketListenerAbstract {
 
@@ -22,13 +19,12 @@ public class PacketEventsListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
-        System.out.println(event.getPacketType().toString());
         if (event.getPacketType() == PacketType.Play.Server.SERVER_DATA) {
             WrapperPlayServerServerData serverData = new WrapperPlayServerServerData(event);
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-                && AntiPopup.config.getBoolean("strip-signature", true)) {
+           && AntiPopup.config.getBoolean("strip-signature", true)) {
             WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
             ChatMessage message = chatMessage.getMessage();
 
