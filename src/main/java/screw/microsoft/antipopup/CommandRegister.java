@@ -30,7 +30,7 @@ public class CommandRegister implements CommandExecutor {
                             props.setProperty("enforce-secure-profile", String.valueOf(false));
                             in.close();
                             FileOutputStream out = new FileOutputStream("server.properties");
-                            props.store(out, "");
+                            props.store(out, "Minecraft server properties");
                             out.close();
                         } else {
                             getLogger().info("AntiPopup has been already set up.");
