@@ -52,7 +52,7 @@ public final class AntiPopup extends JavaPlugin {
         Bukkit.getScheduler().runTask(this, () -> {
             if (PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
                     && !config.getBoolean("no-warning")) {
-                getLogger().warning("-------------------------[ WARNING ]-------------------------");
+                getLogger().warning("---------------------------[ WARNING ]---------------------------");
                 getLogger().warning("There is a known problem with using");
                 getLogger().warning("AntiPopup with ViaVersion on 1.19.");
                 getLogger().warning("Players will still get the popup, either");
@@ -60,9 +60,9 @@ public final class AntiPopup extends JavaPlugin {
                 getLogger().warning("You can also update your server to 1.19.1+.");
                 getLogger().warning("");
                 getLogger().warning("Link: https://github.com/KaspianDev/ViaVersion-patched/actions");
-                getLogger().warning("Note: It is not ideal, I recommend just updating your server.");
+                getLogger().warning("Note: It is not ideal or official, I recommend updating your server.");
                 getLogger().warning("Remove warning by setting no-warning to true in config.");
-                getLogger().warning("-------------------------------------------------------------");
+                getLogger().warning("-----------------------------------------------------------------");
             }
             if (config.getBoolean("first-run")) {
                 try {
