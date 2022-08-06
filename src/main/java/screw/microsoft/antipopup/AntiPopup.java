@@ -10,11 +10,15 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Properties;
 
 public final class AntiPopup extends JavaPlugin {
 
@@ -45,38 +49,47 @@ public final class AntiPopup extends JavaPlugin {
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents");
-        if(PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
-            && !config.getBoolean("no-warning")) {
-            getLogger().warning("!!!              WARNING              !!!");
-            getLogger().warning("There is a known problem with using");
-            getLogger().warning("AntiPopup with ViaVersion on 1.19.");
-            getLogger().warning("Players will still get the popup, either");
-            getLogger().warning("wait for a fix or download a patched ViaVersion.");
-            getLogger().warning("You can also update your server to 1.19.1+.");
-            getLogger().warning("");
-            getLogger().warning("Patch: https://github.com/KaspianDev/ViaVersion-patched/actions");
-            getLogger().warning("Note: It is not ideal, I recommend just updating your server.");
-            getLogger().warning("Remove warning by setting no-warning to true in config.");
-        }
-
-        // To be added soon
-        /*
-        if(config.getBoolean("first-run").equals(true)) {
-            try {
-                FileInputStream in=new FileInputStream("server.properties");
-                Properties props = new Properties();
-                props.load(in);
-                props.setProperty("enforce-secure-profile", String.valueOf(false));
-                in.close();
-                FileOutputStream out=new FileOutputStream("server.properties");
-                props.store(out, "");
-                out.close();
-                config.set("first-run", false);
-            } catch (IOException io) {
-                io.printStackTrace();
+        Bukkit.getScheduler().runTask(this, () -> {
+            if (PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
+                    && !config.getBoolean("no-warning")) {
+                getLogger().warning("-------------------------[ WARNING ]-------------------------");
+                getLogger().warning("There is a known problem with using");
+                getLogger().warning("AntiPopup with ViaVersion on 1.19.");
+                getLogger().warning("Players will still get the popup, either");
+                getLogger().warning("wait for a fix or download a patched ViaVersion.");
+                getLogger().warning("You can also update your server to 1.19.1+.");
+                getLogger().warning("");
+                getLogger().warning("Link: https://github.com/KaspianDev/ViaVersion-patched/actions");
+                getLogger().warning("Note: It is not ideal, I recommend just updating your server.");
+                getLogger().warning("Remove warning by setting no-warning to true in config.");
+                getLogger().warning("-------------------------------------------------------------");
             }
-        }
-        */
+            if (config.getBoolean("first-run")) {
+                try {
+                    FileInputStream in = new FileInputStream("server.properties");
+                    Properties props = new Properties();
+                    props.load(in);
+                    if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
+                        getLogger().warning("------------------[ READ ME PLEASE ]------------------");
+                        getLogger().warning("This is your first startup with AntiPopup.");
+                        getLogger().warning("We decided to disable enforce-secure-profile");
+                        getLogger().warning("for better experience. If you wish to re-enable");
+                        getLogger().warning("it, you can do it in server.properties (if you");
+                        getLogger().warning("know what you are doing). Thanks for using AntiPopup!");
+                        getLogger().warning("------------------------------------------------------");
+                        props.setProperty("enforce-secure-profile", String.valueOf(false));
+                        in.close();
+                        FileOutputStream out = new FileOutputStream("server.properties");
+                        props.store(out, "");
+                        out.close();
+                    }
+                    config.set("first-run", false);
+                    config.save();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
