@@ -33,6 +33,7 @@ public final class AntiPopup extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         try {
             config = YamlDocument.create(new File(getDataFolder(), "config.yml"),
                     Objects.requireNonNull(getResource("config.yml")),
@@ -45,14 +46,18 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().warning("Config file could not be initialized");
             throw new RuntimeException(ex);
         }
+
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents");
+
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
         getLogger().info("Command registered.");
+
         Bukkit.getScheduler().runTask(this, () -> {
             if (PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
                     && !config.getBoolean("no-warning")) {
+
                 getLogger().warning("---------------------------[ WARNING ]---------------------------");
                 getLogger().warning("There is a known problem with using");
                 getLogger().warning("AntiPopup with ViaVersion on 1.19.");
@@ -64,8 +69,11 @@ public final class AntiPopup extends JavaPlugin {
                 getLogger().warning("Note: It is not ideal or official, I recommend updating your server.");
                 getLogger().warning("Remove warning by setting no-warning to true in config.");
                 getLogger().warning("-----------------------------------------------------------------");
+
             }
+
             if (config.getBoolean("first-run")) {
+
                 try {
                     FileInputStream in = new FileInputStream("server.properties");
                     Properties props = new Properties();
@@ -85,6 +93,7 @@ public final class AntiPopup extends JavaPlugin {
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
+
             }
         });
     }

@@ -18,7 +18,7 @@ public class CommandRegister implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 1
-        && sender instanceof ConsoleCommandSender) {
+                && sender instanceof ConsoleCommandSender) {
             switch (args[0]) {
                 case "setup" -> {
                     try {
