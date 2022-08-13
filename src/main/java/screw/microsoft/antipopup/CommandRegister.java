@@ -4,19 +4,22 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-
+import org.jetbrains.annotations.NotNull;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.*;
+import static screw.microsoft.antipopup.AntiPopup.instance;
 
 public class CommandRegister implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender,
+                             @NotNull Command cmd,
+                             @NotNull String label, 
+                             String[] args) {
         if (args.length == 1
                 && sender instanceof ConsoleCommandSender) {
             switch (args[0]) {
@@ -26,12 +29,18 @@ public class CommandRegister implements CommandExecutor {
                         Properties props = new Properties();
                         props.load(in);
                         if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
-                            getLogger().info("enforce-secure-profile got disabled.");
                             props.setProperty("enforce-secure-profile", String.valueOf(false));
                             in.close();
                             FileOutputStream out = new FileOutputStream("server.properties");
                             props.store(out, "Minecraft server properties");
                             out.close();
+                            getLogger().warning("-----------------[ READ ME ]-----------------");
+                            getLogger().warning("Plugin is set up fully now. We changed value");
+                            getLogger().warning("of enforce-secure-chat in server.properties.");
+                            getLogger().warning("");
+                            getLogger().warning("Server will restart in five seconds.");
+                            getLogger().warning("---------------------------------------------");
+                            getScheduler().runTaskLater(instance, () -> getServer().spigot().restart(), 100);
                         } else {
                             getLogger().info("AntiPopup has been already set up.");
                         }

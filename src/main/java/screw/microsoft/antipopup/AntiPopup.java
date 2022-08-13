@@ -11,6 +11,7 @@ import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.util.Properties;
 public final class AntiPopup extends JavaPlugin {
 
     static YamlDocument config;
+    static Plugin instance;
 
     @Override
     public void onLoad() {
@@ -33,6 +35,7 @@ public final class AntiPopup extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
 
         try {
             config = YamlDocument.create(new File(getDataFolder(), "config.yml"),
@@ -57,7 +60,6 @@ public final class AntiPopup extends JavaPlugin {
         Bukkit.getScheduler().runTask(this, () -> {
             if (PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
                     && !config.getBoolean("no-warning")) {
-
                 getLogger().warning("---------------------------[ WARNING ]---------------------------");
                 getLogger().warning("There is a known problem with using");
                 getLogger().warning("AntiPopup with ViaVersion on 1.19.");
@@ -69,11 +71,9 @@ public final class AntiPopup extends JavaPlugin {
                 getLogger().warning("Note: It is not ideal or official, I recommend updating your server.");
                 getLogger().warning("Remove warning by setting no-warning to true in config.");
                 getLogger().warning("-----------------------------------------------------------------");
-
             }
 
             if (config.getBoolean("first-run")) {
-
                 try {
                     FileInputStream in = new FileInputStream("server.properties");
                     Properties props = new Properties();
@@ -93,7 +93,6 @@ public final class AntiPopup extends JavaPlugin {
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
-
             }
         });
     }

@@ -36,5 +36,8 @@ public class PacketEventsListener extends PacketListenerAbstract {
                 v1_19_1.setPreviousSignature(null);
             }
         }
+        if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER) {
+            event.setCancelled(true);
+        }
     }
 }
