@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import static com.github.kaspiandev.antipopup.AntiPopup.config;
 import static org.bukkit.Bukkit.*;
 import static com.github.kaspiandev.antipopup.AntiPopup.instance;
 
@@ -50,6 +51,13 @@ public class CommandRegister implements CommandExecutor {
                     }
                 } catch (IOException io) {
                     io.printStackTrace();
+                }
+            } else if ("reload".equals(args[0])) {
+                try {
+                    config.reload();
+                    getLogger().info("Config has been reloaded.");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
 

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.kaspiandev'
-version = '4.1'
+version = '4.2'
 
 repositories {
     mavenCentral()
@@ -37,7 +37,7 @@ tasks {
         dependsOn(shadowJar)
     }
     shadowJar {
-        archiveName = 'AntiPopup.jar'
+        archiveName = "AntiPopup-${version}.jar"
 
         minimize()
         relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.io.github.retrooper.packetevents")
