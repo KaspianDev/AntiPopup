@@ -40,8 +40,8 @@ tasks {
         archiveName = 'AntiPopup.jar'
 
         minimize()
-        relocate("io.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.io.github.retrooper.packetevents")
-        relocate("com.github.retrooper.packetevents", "screw.microsoft.antipopup.libs.com.github.retrooper.packetevents")
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.io.github.retrooper.packetevents")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.com.github.retrooper.packetevents")
         dependencies {
             exclude(dependency('com.google.code.gson:gson:2.8.0'))
         }
