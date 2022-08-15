@@ -1,8 +1,7 @@
-package screw.microsoft.antipopup;
+package com.github.kaspiandev.antipopup;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
-import com.github.retrooper.packetevents.manager.server.VersionComparison;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -19,6 +18,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
+
+import static org.bukkit.Bukkit.getPluginManager;
 
 public final class AntiPopup extends JavaPlugin {
 
@@ -55,24 +56,21 @@ public final class AntiPopup extends JavaPlugin {
         getLogger().info("Initiated PacketEvents");
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
-        getLogger().info("Command registered.");
+        getLogger().info("Commands registered.");
+        
 
-        Bukkit.getScheduler().runTask(this, () -> {
-            if (PacketEvents.getAPI().getServerManager().getVersion().is(VersionComparison.EQUALS, ServerVersion.V_1_19)
-                    && !config.getBoolean("no-warning")) {
-                getLogger().warning("---------------------------[ WARNING ]---------------------------");
-                getLogger().warning("There is a known problem with using");
-                getLogger().warning("AntiPopup with ViaVersion on 1.19.");
-                getLogger().warning("Players will still get the popup, either");
-                getLogger().warning("wait for a fix or download a patched ViaVersion.");
-                getLogger().warning("You can also update your server to 1.19.1+.");
-                getLogger().warning("");
-                getLogger().warning("Link: https://github.com/KaspianDev/ViaVersion-patched/actions");
-                getLogger().warning("Note: It is not ideal or official, I recommend updating your server.");
-                getLogger().warning("Remove warning by setting no-warning to true in config.");
-                getLogger().warning("-----------------------------------------------------------------");
+        if (getPluginManager().getPlugin("ViaVersion") != null
+                && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19)) {
+            try {
+                var hookClass = ViaHook.class;
+                hookClass.getConstructor().newInstance();
+                getLogger().info("Enabled 1.19 ViaVersion Hook.");
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
+        }
 
+        Bukkit.getScheduler().runTaskLater(this, () -> {
             if (config.getBoolean("first-run")) {
                 try {
                     FileInputStream in = new FileInputStream("server.properties");
@@ -94,7 +92,7 @@ public final class AntiPopup extends JavaPlugin {
                     io.printStackTrace();
                 }
             }
-        });
+        }, 1);
     }
 
     @Override

@@ -1,6 +1,6 @@
 name: AntiPopup
 version: '${version}'
-main: screw.microsoft.antipopup.AntiPopup
+main: com.github.kaspiandev.antipopup.AntiPopup
 api-version: 1.17
 load: POSTWORLD
 softdepend:

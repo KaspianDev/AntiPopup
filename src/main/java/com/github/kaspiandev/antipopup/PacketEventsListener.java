@@ -1,4 +1,4 @@
-package screw.microsoft.antipopup;
+package com.github.kaspiandev.antipopup;
 
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class PacketEventsListener extends PacketListenerAbstract {
 
     public PacketEventsListener() {
-        super(PacketListenerPriority.HIGH);
+        super(PacketListenerPriority.HIGHEST);
     }
 
     @Override
