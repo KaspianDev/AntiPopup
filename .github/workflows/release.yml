@@ -39,7 +39,7 @@ jobs:
     - name: Upload artifacts & release assets
       uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
       with:
-        path: build/libs/AntiPopup.jar
+        path: build/libs/AntiPopup-*.jar
         release-upload-url: ${{ steps.release.outputs.upload_url }}
         upload-release-files: true
       env:
