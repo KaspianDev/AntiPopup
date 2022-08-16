@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.kaspiandev'
-version = '4.2'
+version = '4.3'
 
 repositories {
     mavenCentral()
