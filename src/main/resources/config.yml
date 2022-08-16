@@ -1,7 +1,7 @@
 config-version: 6
 
 # Should we prevent messages from being reported?
-# Leave as yes until you have a different plugin stripping those.
+# Leave as true unless you have a different plugin stripping those.
 strip-signature: true
 
 # Do not touch this!
