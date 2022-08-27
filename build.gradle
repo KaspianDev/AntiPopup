@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.github.kaspiandev'
-version = '4.3'
+version = '4.4'
 
 repositories {
     mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
     compileOnly 'org.apache.commons:commons-configuration2:2.8.0'
     compileOnly "com.viaversion:viaversion:4.4.1"
 
-    implementation 'com.github.retrooper.packetevents:spigot:2.0.0-20220807.223642-28'
+    implementation 'com.github.retrooper.packetevents:spigot:2.0.0-20220826.083630-42'
 }
 
 tasks {

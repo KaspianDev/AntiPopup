@@ -31,7 +31,7 @@ public final class AntiPopup extends JavaPlugin {
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().getSettings().debug(false).bStats(false).checkForUpdates(false);
         PacketEvents.getAPI().load();
-        getLogger().info("Loaded PacketEvents");
+        getLogger().info("Loaded PacketEvents.");
     }
 
     @Override
@@ -47,13 +47,13 @@ public final class AntiPopup extends JavaPlugin {
                             .build());
             getLogger().info("Config enabled.");
         } catch (IOException ex) {
-            getLogger().warning("Config file could not be initialized");
+            getLogger().warning("Config file could not be initialized.");
             throw new RuntimeException(ex);
         }
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
-        getLogger().info("Initiated PacketEvents");
+        getLogger().info("Initiated PacketEvents.");
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
         getLogger().info("Commands registered.");
@@ -98,6 +98,6 @@ public final class AntiPopup extends JavaPlugin {
     @Override
     public void onDisable() {
         PacketEvents.getAPI().terminate();
-        getLogger().info("Disabled PacketEvents");
+        getLogger().info("Disabled PacketEvents.");
     }
 }

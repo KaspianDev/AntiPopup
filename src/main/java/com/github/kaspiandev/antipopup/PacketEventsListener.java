@@ -37,7 +37,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
             }
         }
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER
-                && AntiPopup.config.getBoolean("strip-signature", true)) {
+                && AntiPopup.config.getBoolean("dont-send-header", true)) {
             event.setCancelled(true);
         }
     }
