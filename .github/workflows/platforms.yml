@@ -19,7 +19,9 @@ jobs:
           curseforge-id: 663152
           curseforge-token: ${{ secrets.CURSE }}
 
-          files-primary: build/libs/AntiPopup-*.jar
+          files: build/libs/AntiPopup-*.jar
+          files-primary: ""
+          files-secondary: ""
 
           game-versions: |
             1.19.2
