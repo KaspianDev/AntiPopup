@@ -1,21 +1,21 @@
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id "java"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
-group = 'com.github.kaspiandev'
-version = '4.4'
+group = "com.github.kaspiandev"
+version = "4.5"
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url "https://repo.codemc.io/repository/maven-snapshots/" }
     maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
     maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven {
         name = "No."
@@ -24,12 +24,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
-    compileOnly 'dev.dejvokep:boosted-yaml-spigot:1.3'
-    compileOnly 'org.apache.commons:commons-configuration2:2.8.0'
+    compileOnly "org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT"
+    compileOnly "dev.dejvokep:boosted-yaml-spigot:1.3"
+    compileOnly "org.apache.commons:commons-configuration2:2.8.0"
     compileOnly "com.viaversion:viaversion:4.4.1"
 
-    implementation 'com.github.retrooper.packetevents:spigot:2.0.0-20220826.083630-42'
+    implementation "org.bstats:bstats-bukkit:3.0.0"
+    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20220826.083630-42"
 }
 
 tasks {
@@ -42,8 +43,9 @@ tasks {
         minimize()
         relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.io.github.retrooper.packetevents")
         relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.com.github.retrooper.packetevents")
+        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.org.bstats")
         dependencies {
-            exclude(dependency('com.google.code.gson:gson:2.8.0'))
+            exclude(dependency("com.google.code.gson:gson:2.8.0"))
         }
     }
 }
@@ -64,8 +66,8 @@ java {
 processResources {
     def props = [version: version]
     inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
+    filteringCharset "UTF-8"
+    filesMatching("plugin.yml") {
         expand props
     }
 }

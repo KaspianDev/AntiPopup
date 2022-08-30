@@ -1,4 +1,8 @@
-config-version: 7
+config-version: 9
+
+# Should we collect anonymous data about your server?
+# false by default.
+bstats: false
 
 # Should we prevent messages from being reported?
 # Leave as true unless you have a different plugin stripping those.
@@ -6,5 +10,6 @@ strip-signature: true
 
 dont-send-header: true
 
-# Do not touch this!
+# Do not touch ones below!
 first-run: true
+ask-bstats: true
