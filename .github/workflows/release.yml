@@ -47,6 +47,8 @@ jobs:
       with:
         upload_url: ${{ steps.release.outputs.upload_url }}
         asset_name: checksum.txt
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
         
     - name: Upload artifacts & release assets
       uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
