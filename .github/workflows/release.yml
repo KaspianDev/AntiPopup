@@ -36,6 +36,17 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
         
+    - uses: MCJack123/ghaction-generate-release-hashes@v3
+      with:
+        hash-type: md5
+        file-name: hashes.txt
+        
+    - name: upload file on release
+      uses: Fhwang0926/upload-release-asset@v1.1.17
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_name: hashes.txt
+        
     - name: Upload artifacts & release assets
       uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
       with:
