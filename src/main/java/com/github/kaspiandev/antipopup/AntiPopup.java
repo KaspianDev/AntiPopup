@@ -46,7 +46,7 @@ public final class AntiPopup extends JavaPlugin {
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"))
                             .build());
-            getLogger().info("Config enabled.");
+            getLogger().fine("Config enabled.");
         } catch (IOException ex) {
             getLogger().warning("Config file could not be initialized.");
             throw new RuntimeException(ex);
@@ -54,15 +54,15 @@ public final class AntiPopup extends JavaPlugin {
 
         if (config.getBoolean("bstats", false)) {
             metrics = new Metrics(this, 16308);
-            getLogger().info("Loaded optional metrics.");
+            getLogger().fine("Loaded optional metrics.");
         }
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
-        getLogger().info("Initiated PacketEvents.");
+        getLogger().fine("Initiated PacketEvents.");
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
-        getLogger().info("Commands registered.");
+        getLogger().fine("Commands registered.");
 
 
         if (getPluginManager().getPlugin("ViaVersion") != null
@@ -70,7 +70,7 @@ public final class AntiPopup extends JavaPlugin {
             try {
                 var hookClass = ViaHook.class;
                 hookClass.getConstructor().newInstance();
-                getLogger().info("Enabled 1.19 ViaVersion Hook.");
+                getLogger().fine("Enabled 1.19 ViaVersion Hook.");
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
