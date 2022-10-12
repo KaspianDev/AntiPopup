@@ -14,9 +14,8 @@ import java.util.UUID;
 public class PacketEventsListener extends PacketListenerAbstract {
 
     public PacketEventsListener() {
-        super(PacketListenerPriority.HIGHEST);
+        super(PacketListenerPriority.HIGH);
     }
-
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.SERVER_DATA) {
@@ -24,7 +23,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-                && AntiPopup.config.getBoolean("strip-signature", true)) {
+                    && AntiPopup.config.getBoolean("strip-signature", true)) {
             WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
             ChatMessage message = chatMessage.getMessage();
 
@@ -37,7 +36,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
             }
         }
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER
-                && AntiPopup.config.getBoolean("dont-send-header", true)) {
+                    && AntiPopup.config.getBoolean("dont-send-header", true)) {
             event.setCancelled(true);
         }
     }

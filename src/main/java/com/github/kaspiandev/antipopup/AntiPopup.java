@@ -1,5 +1,6 @@
 package com.github.kaspiandev.antipopup;
 
+import com.github.kaspiandev.antipopup.api.Api;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -9,7 +10,9 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import org.apache.logging.log4j.LogManager;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,16 +57,10 @@ public final class AntiPopup extends JavaPlugin {
 
         if (config.getBoolean("bstats", false)) {
             metrics = new Metrics(this, 16308);
+            metrics.addCustomChart(new SimplePie("runs_viaversion",
+                    () -> Bukkit.getPluginManager().isPluginEnabled("ViaVersion") ? "Yes" : "No"));
             getLogger().info("Loaded optional metrics.");
         }
-
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
-        PacketEvents.getAPI().init();
-        getLogger().info("Initiated PacketEvents.");
-
-        Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
-        getLogger().info("Commands registered.");
-
 
         if (getPluginManager().getPlugin("ViaVersion") != null
                     && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19)) {
@@ -76,7 +73,26 @@ public final class AntiPopup extends JavaPlugin {
             }
         }
 
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
+        PacketEvents.getAPI().init();
+        getLogger().info("Initiated PacketEvents.");
+
+        getServer().getPluginManager().registerEvents(new KickListener(), this);
+        getLogger().info("Listeners registered.");
+
+        Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
+        getLogger().info("Commands registered.");
+
+        if (config.getBoolean("filter-not-secure", true)
+                    || config.getBoolean("sync-time-suppress", false)) {
+            ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
+            getLogger().info("Logger filter enabled.");
+        } else {
+            getLogger().info("Logger filter has not been enabled.");
+        }
+
         Bukkit.getScheduler().runTaskLater(this, () -> {
+            if (config.getBoolean("auto-setup", false)) new Api(instance).setupAntiPopup(80);
             if (config.getBoolean("first-run")) {
                 try {
                     FileInputStream in = new FileInputStream("server.properties");

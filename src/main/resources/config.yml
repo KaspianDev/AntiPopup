@@ -1,14 +1,34 @@
-config-version: 9
+config-version: 16
 
 # Should we collect anonymous data about your server?
 # false by default.
 bstats: false
 
+# Should we remove [Not Secure] from /say?
+# There is a very small chance of catching something
+# that should not be caught. If that happens report the
+# incident to Github issues of AntiPopup.
+filter-not-secure: true
+
+# Should we suppress messages about unsynced time?
+sync-time-suppress: false
+
+# Give it a try if players get kicked
+# with message about unsynced message time.
+# UNTESTED
+prevent-time-sync-kick: false
+
 # Should we prevent messages from being reported?
 # Leave as true unless you have a different plugin stripping those.
 strip-signature: true
 
+# We dont need that packet if
+# we dont sign messages.
 dont-send-header: true
+
+# Should setup be ran on first start?
+# Useful for all kinds of setups or server hosts.
+auto-setup: false
 
 # Do not touch ones below!
 first-run: true
