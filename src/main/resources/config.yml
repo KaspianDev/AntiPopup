@@ -1,4 +1,4 @@
-config-version: 16
+config-version: 19
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -21,6 +21,11 @@ prevent-time-sync-kick: false
 # Should we prevent messages from being reported?
 # Leave as true unless you have a different plugin stripping those.
 strip-signature: true
+
+# False by default, because really we
+# shouldnt suppress any warnings, if you
+# get annoyed however, turn this on (true).
+suppress-pe-warnings: false
 
 # We dont need that packet if
 # we dont sign messages.
