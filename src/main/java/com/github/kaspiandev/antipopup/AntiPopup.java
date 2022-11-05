@@ -1,6 +1,9 @@
 package com.github.kaspiandev.antipopup;
 
 import com.github.kaspiandev.antipopup.api.Api;
+import com.github.kaspiandev.antipopup.listeners.KickListener;
+import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
+import com.github.kaspiandev.antipopup.listeners.URLListener;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -27,7 +30,7 @@ import static org.bukkit.Bukkit.getPluginManager;
 
 public final class AntiPopup extends JavaPlugin {
 
-    static YamlDocument config;
+    public static YamlDocument config;
     static Plugin instance;
     static Metrics metrics;
 
@@ -78,6 +81,9 @@ public final class AntiPopup extends JavaPlugin {
         getLogger().info("Initiated PacketEvents.");
 
         getServer().getPluginManager().registerEvents(new KickListener(), this);
+        if (config.getBoolean("enable-urls")) {
+            getServer().getPluginManager().registerEvents(new URLListener(), this);
+        }
         getLogger().info("Listeners registered.");
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());

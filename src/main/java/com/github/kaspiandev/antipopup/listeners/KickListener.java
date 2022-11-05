@@ -1,5 +1,6 @@
-package com.github.kaspiandev.antipopup;
+package com.github.kaspiandev.antipopup.listeners;
 
+import com.github.kaspiandev.antipopup.AntiPopup;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

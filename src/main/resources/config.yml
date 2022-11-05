@@ -1,4 +1,4 @@
-config-version: 19
+config-version: 22
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -34,6 +34,10 @@ dont-send-header: true
 # Should setup be ran on first start?
 # Useful for all kinds of setups or server hosts.
 auto-setup: false
+
+# Should we add back URLs in chat messages?
+# Might cause incompabilities.
+enable-urls: false
 
 # Do not touch ones below!
 first-run: true
