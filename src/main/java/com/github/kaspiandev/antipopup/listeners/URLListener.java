@@ -1,5 +1,6 @@
 package com.github.kaspiandev.antipopup.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,12 +15,13 @@ public class URLListener implements Listener {
         if (event.isCancelled()) return;
         event.setCancelled(true);
 
-        String message = event.getMessage();
         Player sender = event.getPlayer();
+        String message = String.format(event.getFormat(), sender.getName(), event.getMessage());
+
+        Bukkit.getConsoleSender().sendMessage(message);
 
         for (Player player : event.getRecipients()) {
-            player.sendMessage(sender.getUniqueId(),
-                    String.format(event.getFormat(), sender.getName(), message));
+            player.sendMessage(sender.getUniqueId(), message);
         }
     }
 }
