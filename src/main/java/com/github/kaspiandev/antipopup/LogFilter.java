@@ -30,14 +30,6 @@ public class LogFilter implements Filter {
             return Filter.Result.DENY;
 
         }
-        String packetEventError = "PacketEvents caught an unhandled "
-                                          + "exception while calling your listener."
-                                          + " java.lang.IndexOutOfBoundsException: index: 3,"
-                                          + " length: 47 (expected: range(0, 3))";
-        if (config.getBoolean("suppress-pe-warnings", false)
-                    && event.getMessage().getFormattedMessage().contains(packetEventError)) {
-            return Filter.Result.DENY;
-        }
         return Filter.Result.NEUTRAL;
     }
 
