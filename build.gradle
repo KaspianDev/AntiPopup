@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.kaspiandev"
-version = "5"
+version = "5.1"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ dependencies {
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20221208.222134-71"
+    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20221209.063605-74"
 }
 
 tasks {
