@@ -31,7 +31,7 @@ dependencies {
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20221209.063605-74"
+    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20221209.211024-75"
 }
 
 tasks {
