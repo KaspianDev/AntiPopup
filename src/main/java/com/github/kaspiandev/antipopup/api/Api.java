@@ -47,7 +47,7 @@ public class Api {
                     getServer().spigot().restart();
                 }, time);
             } else {
-                getLogger().info("AntiPopup has been already set up.");
+                getLogger().fine("AntiPopup has been already set up.");
             }
         } catch (IOException io) {
             io.printStackTrace();

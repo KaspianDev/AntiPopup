@@ -52,7 +52,7 @@ public final class AntiPopup extends JavaPlugin {
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"))
                             .build());
-            getLogger().info("Config enabled.");
+            getLogger().fine("Config enabled.");
         } catch (IOException ex) {
             getLogger().warning("Config file could not be initialized.");
             throw new RuntimeException(ex);
@@ -78,23 +78,23 @@ public final class AntiPopup extends JavaPlugin {
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
-        getLogger().info("Initiated PacketEvents.");
+        getLogger().fine("Initiated PacketEvents.");
 
         getServer().getPluginManager().registerEvents(new KickListener(), this);
         if (config.getBoolean("enable-urls")) {
             getServer().getPluginManager().registerEvents(new URLListener(), this);
         }
-        getLogger().info("Listeners registered.");
+        getLogger().fine("Listeners registered.");
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
-        getLogger().info("Commands registered.");
+        getLogger().fine("Commands registered.");
 
         if (config.getBoolean("filter-not-secure", true)
                     || config.getBoolean("sync-time-suppress", false)) {
             ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
             getLogger().info("Logger filter enabled.");
         } else {
-            getLogger().info("Logger filter has not been enabled.");
+            getLogger().fine("Logger filter has not been enabled.");
         }
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
