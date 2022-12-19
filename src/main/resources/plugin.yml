@@ -11,6 +11,7 @@ softdepend:
   - ViaRewind
   - Geyser-Spigot
 authors: [ Kaspian ]
+contributors: [ Aitooor ]
 description: A plugin that removed annoying unsafe server popup.
 libraries:
   - "dev.dejvokep:boosted-yaml-spigot:1.3"

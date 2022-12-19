@@ -6,6 +6,7 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage;
 import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_19_1;
+import com.github.retrooper.packetevents.protocol.chat.message.ChatMessage_v1_19_3;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
@@ -33,7 +34,7 @@ public class PacketEventsListener extends PacketListenerAbstract {
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-                    && AntiPopup.config.getBoolean("strip-signature", true)) {
+                && AntiPopup.config.getBoolean("strip-signature", true)) {
             WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
             ChatMessage message = chatMessage.getMessage();
             if (message instanceof ChatMessage_v1_19_1 v1_19_1) {
@@ -43,9 +44,16 @@ public class PacketEventsListener extends PacketListenerAbstract {
                 v1_19_1.setSenderUUID(new UUID(0L, 0L));
                 v1_19_1.setPreviousSignature(null);
             }
+            if (message instanceof ChatMessage_v1_19_3 v1_19_3) {
+                // We wanna trick the system by giving it random crap
+                v1_19_3.setSignature(new byte[0]);
+                v1_19_3.setSalt(0);
+                v1_19_3.setSenderUUID(new UUID(0L, 0L));
+                v1_19_3.setSignature(null);
+            }
         }
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER
-                    && AntiPopup.config.getBoolean("dont-send-header", true)) {
+                && AntiPopup.config.getBoolean("dont-send-header", true)) {
             event.setCancelled(true);
         }
     }

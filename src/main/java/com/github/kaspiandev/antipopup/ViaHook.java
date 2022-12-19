@@ -12,7 +12,7 @@ public class ViaHook {
     public ViaHook() {
         var viaProtocolManager = Via.getManager().getProtocolManager();
         Protocol<?, ?, ?, ?> protocol = viaProtocolManager.getProtocol(
-                ProtocolVersion.v1_19_1, ProtocolVersion.v1_19);
+                ProtocolVersion.v1_19_3, ProtocolVersion.v1_19);
 
         if (protocol == null) return;
 
