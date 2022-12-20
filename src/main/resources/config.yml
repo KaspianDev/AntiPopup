@@ -1,4 +1,4 @@
-config-version: 23
+config-version: 26
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -9,14 +9,6 @@ bstats: false
 # that should not be caught. If that happens report the
 # incident to Github issues of AntiPopup.
 filter-not-secure: true
-
-# Should we suppress messages about unsynced time?
-sync-time-suppress: false
-
-# Give it a try if players get kicked
-# with message about unsynced message time.
-# UNTESTED
-prevent-time-sync-kick: false
 
 # Should we prevent messages from being reported?
 # Leave as true unless you have a different plugin stripping those.
@@ -30,10 +22,13 @@ dont-send-header: true
 # Useful for all kinds of setups or server hosts.
 auto-setup: false
 
-# Should we add back URLs in chat messages?
-# Might cause incompabilities.
-enable-urls: false
+# PACKET - Only up to 1.19.2
+# BUKKIT - 1.19.3+
+# BUKKIT mode additionally supports
+# links in messages.
+mode: PACKET
 
 # Do not touch ones below!
 first-run: true
 ask-bstats: true
+setup-mode: true

@@ -19,7 +19,6 @@ public class URLListener implements Listener {
         String message = String.format(event.getFormat(), sender.getName(), event.getMessage());
 
         Bukkit.getConsoleSender().sendMessage(message);
-
         for (Player player : event.getRecipients()) {
             player.sendMessage(sender.getUniqueId(), message);
         }
