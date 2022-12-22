@@ -78,15 +78,14 @@ public final class AntiPopup extends JavaPlugin {
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
 
-        if (yamlDoc.getBoolean("setup-mode")) {
-            if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_19_2)) {
-                yamlDoc.set("mode", "BUKKIT");
-                yamlDoc.set("setup-mode", false);
-                try {
-                    yamlDoc.save();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        if (yamlDoc.getBoolean("setup-mode")
+                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_19_2)) {
+            yamlDoc.set("mode", "BUKKIT");
+            yamlDoc.set("setup-mode", false);
+            try {
+                yamlDoc.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
