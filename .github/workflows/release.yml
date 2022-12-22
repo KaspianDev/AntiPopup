@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    if: "startsWith(github.event.head_commit.message, '🔼')"
+    if: "startsWith(github.event.head_commit.message, '🔼') || github.event_name == 'workflow_dispatch'"
     runs-on: ubuntu-20.04
 
     steps:
