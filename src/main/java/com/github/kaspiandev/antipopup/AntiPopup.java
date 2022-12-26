@@ -3,6 +3,8 @@ package com.github.kaspiandev.antipopup;
 import com.github.kaspiandev.antipopup.api.Api;
 import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
 import com.github.kaspiandev.antipopup.listeners.URLListener;
+import com.github.kaspiandev.antipopup.nms.PlayerListener;
+import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -79,13 +81,19 @@ public final class AntiPopup extends JavaPlugin {
         getLogger().info("Initiated PacketEvents.");
 
         if (yamlDoc.getBoolean("setup-mode")
-                    && PacketEvents.getAPI().getServerManager().getVersion().isNewerThan(ServerVersion.V_1_19_2)) {
-            yamlDoc.set("mode", "BUKKIT");
+                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_2)) {
+            yamlDoc.set("mode", "NMS");
             yamlDoc.set("setup-mode", false);
             try {
                 yamlDoc.save();
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+        }
+
+        if (yamlDoc.getString("mode").equals("NMS")) {
+            if (PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
+                getServer().getPluginManager().registerEvents(new PlayerListener(new PlayerInjector()), this);
             }
         }
 

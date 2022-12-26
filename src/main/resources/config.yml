@@ -22,10 +22,9 @@ dont-send-header: true
 # Useful for all kinds of setups or server hosts.
 auto-setup: false
 
+# NMS - Only for 1.19.3
 # PACKET - Only up to 1.19.2
-# BUKKIT - 1.19.3+
-# BUKKIT mode additionally supports
-# links in messages.
+# BUKKIT - Version independent, less compatible, has URLs in messages
 mode: PACKET
 
 # Do not touch ones below!
