@@ -1,0 +1,18 @@
+#!/bin/bash
+
+btUrl="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
+
+curl -o BuildTools.jar $btUrl
+
+echo ""
+echo "----------------------------------------"
+echo "Downloading complete. Building started."
+echo "----------------------------------------"
+sleep 3
+
+java -jar BuildTools.jar --rev 1.19.3 --remapped
+
+echo ""
+echo "----------------------------------------"
+echo "Done."
+echo "----------------------------------------"
