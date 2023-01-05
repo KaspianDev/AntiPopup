@@ -1,6 +1,5 @@
 package com.github.kaspiandev.antipopup.nms;
 
-import com.github.kaspiandev.antipopup.nms.AbstractInjector;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -17,7 +16,6 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         injector.inject(event.getPlayer());
-        System.out.println("injected");
     }
 
     @EventHandler

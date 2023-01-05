@@ -9,7 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Set;
 
-public class URLListener implements Listener {
+public class ChatListener implements Listener {
 
     // Must be monitor
     @EventHandler(priority = EventPriority.MONITOR)

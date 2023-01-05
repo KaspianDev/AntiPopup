@@ -1,8 +1,8 @@
 package com.github.kaspiandev.antipopup;
 
 import com.github.kaspiandev.antipopup.api.Api;
+import com.github.kaspiandev.antipopup.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
-import com.github.kaspiandev.antipopup.listeners.URLListener;
 import com.github.kaspiandev.antipopup.nms.PlayerListener;
 import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector;
 import com.github.retrooper.packetevents.PacketEvents;
@@ -76,12 +76,17 @@ public final class AntiPopup extends JavaPlugin {
             }
         }
 
+        if (yamlDoc.getBoolean("clickable-urls")) {
+            getServer().getPluginManager().registerEvents(new ChatListener(), this);
+            getLogger().info("Enabled URL support.");
+        }
+
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
 
         if (yamlDoc.getBoolean("setup-mode")
-                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_2)) {
+                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
             yamlDoc.set("mode", "NMS");
             yamlDoc.set("setup-mode", false);
             try {
@@ -95,11 +100,6 @@ public final class AntiPopup extends JavaPlugin {
             if (PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
                 getServer().getPluginManager().registerEvents(new PlayerListener(new PlayerInjector()), this);
             }
-        }
-
-        if (yamlDoc.getString("mode").equals("BUKKIT")) {
-            getServer().getPluginManager().registerEvents(new URLListener(), this);
-            getLogger().info("Listeners registered.");
         }
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());

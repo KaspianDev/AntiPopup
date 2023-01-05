@@ -37,7 +37,7 @@ public class PlayerInjector implements AbstractInjector {
 
         ChannelPipeline pipeline = ((CraftPlayer) player).getHandle()
                                            .connection.getConnection().channel.pipeline();
-        pipeline.addBefore("packet_handler", player.getName(), duplexHandler);
+        pipeline.addBefore("packet_handler", "antipopup_handler", duplexHandler);
     }
 
     public void uninject(Player player) {

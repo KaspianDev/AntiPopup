@@ -1,4 +1,4 @@
-config-version: 26
+config-version: 28
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -24,8 +24,11 @@ auto-setup: false
 
 # NMS - Only for 1.19.3
 # PACKET - Only up to 1.19.2
-# BUKKIT - Version independent, less compatible, has URLs in messages
 mode: PACKET
+
+# Readd clickable URLs in messages.
+# Could cause incompabilities!
+clickable-urls: false
 
 # Do not touch ones below!
 first-run: true
