@@ -2,6 +2,9 @@
 
 btUrl="https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
 
+mkdir buildtools
+cd buildtools
+
 curl -o BuildTools.jar $btUrl
 
 echo ""
