@@ -1,9 +1,10 @@
 package com.github.kaspiandev.antipopup;
 
 import com.github.kaspiandev.antipopup.api.Api;
-import com.github.kaspiandev.antipopup.listeners.KickListener;
+import com.github.kaspiandev.antipopup.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
-import com.github.kaspiandev.antipopup.listeners.URLListener;
+import com.github.kaspiandev.antipopup.nms.PlayerListener;
+import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -30,9 +31,8 @@ import static org.bukkit.Bukkit.getPluginManager;
 
 public final class AntiPopup extends JavaPlugin {
 
-    public static YamlDocument config;
-    static Plugin instance;
-    static Metrics metrics;
+    private static YamlDocument yamlDoc;
+    private static Plugin instance;
 
     @Override
     public void onLoad() {
@@ -46,7 +46,7 @@ public final class AntiPopup extends JavaPlugin {
     public void onEnable() {
         instance = this;
         try {
-            config = YamlDocument.create(new File(getDataFolder(), "config.yml"),
+            yamlDoc = YamlDocument.create(new File(getDataFolder(), "config.yml"),
                     Objects.requireNonNull(getResource("config.yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
@@ -58,8 +58,8 @@ public final class AntiPopup extends JavaPlugin {
             throw new RuntimeException(ex);
         }
 
-        if (config.getBoolean("bstats", false)) {
-            metrics = new Metrics(this, 16308);
+        if (yamlDoc.getBoolean("bstats")) {
+            Metrics metrics = new Metrics(this, 16308);
             metrics.addCustomChart(new SimplePie("runs_viaversion",
                     () -> Bukkit.getPluginManager().isPluginEnabled("ViaVersion") ? "Yes" : "No"));
             getLogger().info("Loaded optional metrics.");
@@ -76,21 +76,37 @@ public final class AntiPopup extends JavaPlugin {
             }
         }
 
+        if (yamlDoc.getBoolean("clickable-urls")) {
+            getServer().getPluginManager().registerEvents(new ChatListener(), this);
+            getLogger().info("Enabled URL support.");
+        }
+
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener());
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
 
-        getServer().getPluginManager().registerEvents(new KickListener(), this);
-        if (config.getBoolean("enable-urls")) {
-            getServer().getPluginManager().registerEvents(new URLListener(), this);
+        if (yamlDoc.getBoolean("setup-mode")
+                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
+            yamlDoc.set("mode", "NMS");
+            yamlDoc.set("setup-mode", false);
+            try {
+                yamlDoc.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        getLogger().info("Listeners registered.");
+
+        if (yamlDoc.getString("mode").equals("NMS")) {
+            if (PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
+                getServer().getPluginManager().registerEvents(new PlayerListener(new PlayerInjector()), this);
+            }
+        }
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
         getLogger().info("Commands registered.");
 
-        if (config.getBoolean("filter-not-secure", true)
-                    || config.getBoolean("sync-time-suppress", false)) {
+        if (yamlDoc.getBoolean("filter-not-secure")
+                    || yamlDoc.getBoolean("sync-time-suppress")) {
             ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
             getLogger().info("Logger filter enabled.");
         } else {
@@ -98,8 +114,8 @@ public final class AntiPopup extends JavaPlugin {
         }
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (config.getBoolean("auto-setup", false)) new Api(instance).setupAntiPopup(80);
-            if (config.getBoolean("first-run")) {
+            if (yamlDoc.getBoolean("auto-setup")) new Api(instance).setupAntiPopup(80);
+            if (yamlDoc.getBoolean("first-run")) {
                 try {
                     FileInputStream in = new FileInputStream("server.properties");
                     Properties props = new Properties();
@@ -114,13 +130,12 @@ public final class AntiPopup extends JavaPlugin {
                         getLogger().warning("------------------------------------------------------");
                     }
                     in.close();
-                    config.set("first-run", false);
-                    config.save();
+                    yamlDoc.save();
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
             }
-            if (config.getBoolean("ask-bstats")) {
+            if (yamlDoc.getBoolean("ask-bstats")) {
                 try {
                     getLogger().warning("--------------------[ READ ME PLEASE ]--------------------");
                     getLogger().warning("This is your first startup with AntiPopup.");
@@ -129,8 +144,8 @@ public final class AntiPopup extends JavaPlugin {
                     getLogger().warning("Because I respect your freedom it's disabled by default.");
                     getLogger().warning("Thanks for using AntiPopup! (you will not see this again)");
                     getLogger().warning("----------------------------------------------------------");
-                    config.set("ask-bstats", false);
-                    config.save();
+                    yamlDoc.set("ask-bstats", false);
+                    yamlDoc.save();
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
@@ -142,5 +157,13 @@ public final class AntiPopup extends JavaPlugin {
     public void onDisable() {
         PacketEvents.getAPI().terminate();
         getLogger().info("Disabled PacketEvents.");
+    }
+
+    public static Plugin getInstance() {
+        return instance;
+    }
+
+    public static YamlDocument getYamlDoc() {
+        return yamlDoc;
     }
 }

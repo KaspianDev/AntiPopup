@@ -1,5 +1,6 @@
 package com.github.kaspiandev.antipopup;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -7,16 +8,17 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.message.Message;
+import org.bukkit.plugin.Plugin;
 
-import static com.github.kaspiandev.antipopup.AntiPopup.config;
+    public class LogFilter implements Filter {
 
-public class LogFilter implements Filter {
+    private final YamlDocument yamlDoc = AntiPopup.getYamlDoc();
 
     @Override
     public Filter.Result filter(LogEvent event) {
 
         // We wanna eliminate possibilities of false catches.
-        if (config.getBoolean("filter-not-secure", true)
+        if (yamlDoc.getBoolean("filter-not-secure")
                     && event.getMessage().getFormattedMessage().contains("[Not Secure] ")
                     && event.getLoggerName().equals("net.minecraft.server.MinecraftServer")
                     && event.getLevel() == Level.INFO) {
@@ -24,11 +26,6 @@ public class LogFilter implements Filter {
                     event.getMessage().getFormattedMessage()
                             .replace("[Not Secure] ", ""));
             return Filter.Result.DENY;
-        }
-        if (config.getBoolean("sync-time-suppress", false)
-                    && event.getMessage().getFormattedMessage().contains("sent out-of-order chat:")) {
-            return Filter.Result.DENY;
-
         }
         return Filter.Result.NEUTRAL;
     }
