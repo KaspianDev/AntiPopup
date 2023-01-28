@@ -46,7 +46,7 @@ jobs:
       uses: jmgilman/actions-generate-checksum@v1.0.0
       with:
         method: md5
-        patterns: build/libs/AntiPopup-*.jar
+        patterns: build/libs/AntiPopup-???.jar
         
     - name: upload file on release
       uses: Fhwang0926/upload-release-asset@v1.1.17
@@ -59,7 +59,7 @@ jobs:
     - name: Upload artifacts & release assets
       uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
       with:
-        path: build/libs/AntiPopup-*.jar
+        path: build/libs/AntiPopup-???.jar
         release-upload-url: ${{ steps.release.outputs.upload_url }}
         upload-release-files: true
       env:
