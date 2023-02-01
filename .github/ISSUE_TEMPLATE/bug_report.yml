@@ -1,0 +1,91 @@
+name: Bug report
+title: "[BUG] "
+description: Create a report to help us improve
+labels: bug
+assignees:
+  - KaspianDev
+
+body:
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: false
+  - type: input
+    id: system
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      placeholder: Arch Linux
+    validations:
+      required: true
+  - type: input
+    id: software
+    attributes:
+      label: Server Software
+      description: What server software are you using? Include build number.
+      placeholder: Spigot (420)
+    validations:
+      required: true
+  - type: dropdown
+    id: ver
+    attributes:
+      label: Server Version
+      description: What minecraft version is your server using?
+      options:
+        - 1.19
+        - 1.19.1
+        - 1.19.2
+        - 1.19.3
+    validations:
+      required: true
+  - type: dropdown
+    id: proxy
+    attributes:
+      label: Proxy Type
+      description: What proxy are you using?
+      options:
+        - Bungeecord
+        - Waterfall
+        - Velocity
+        - Other
+        - None
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Plugin List
+      description: What plugins are on your server?
+      placeholder: AntiPopup, LuckPerms
+    render: bash
+    validations:
+      required: true
+  - type: input
+    id: logs
+    attributes:
+      label: Server logs
+      description: Paste a link to your latest log.
+    validations:
+      required: true
