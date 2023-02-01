@@ -70,16 +70,13 @@ body:
         - Waterfall
         - Velocity
         - Other
-        - None
-    validations:
-      required: true
   - type: textarea
-    id: repro
+    id: plugins
     attributes:
       label: Plugin List
       description: What plugins are on your server?
       placeholder: AntiPopup, LuckPerms
-    render: bash
+      render: bash
     validations:
       required: true
   - type: input
