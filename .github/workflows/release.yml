@@ -46,7 +46,7 @@ jobs:
       uses: jmgilman/actions-generate-checksum@v1.0.0
       with:
         method: md5
-        patterns: build/libs/AntiPopup-???.jar
+        patterns: build/libs/AntiPopup-*[!-dev][!-all].jar
         
     - name: upload file on release
       uses: Fhwang0926/upload-release-asset@v1.1.17
