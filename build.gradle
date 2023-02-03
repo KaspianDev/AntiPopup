@@ -33,7 +33,7 @@ dependencies {
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20230202.192528-135"
+    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20230203.041153-137"
 
     paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.19.3-R0.1-SNAPSHOT"
 }
