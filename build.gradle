@@ -1,11 +1,11 @@
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id "io.papermc.paperweight.userdev" version "1.4.1"
+    id "io.papermc.paperweight.userdev" version "1.5.1"
 }
 
 group = "com.github.kaspiandev"
-version = "5.4-RC2"
+version = "5.4"
 
 repositories {
     mavenCentral()
