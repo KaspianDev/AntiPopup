@@ -7,6 +7,8 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 
+// Temp
+@SuppressWarnings("deprecation")
 public class ViaHook {
 
     public ViaHook() {

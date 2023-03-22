@@ -4,8 +4,10 @@ import com.github.kaspiandev.antipopup.api.Api;
 import com.github.kaspiandev.antipopup.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
 import com.github.kaspiandev.antipopup.nms.PlayerListener;
-import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector;
+import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector_v1_19_3;
+import com.github.kaspiandev.antipopup.nms.v1_19_4.PlayerInjector_v1_19_4;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
@@ -19,6 +21,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -85,9 +88,11 @@ public final class AntiPopup extends JavaPlugin {
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
 
-        if (yamlDoc.getBoolean("setup-mode")
-                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
-            yamlDoc.set("mode", "NMS");
+        if (yamlDoc.getBoolean("setup-mode")) {
+            switch (PacketEvents.getAPI().getServerManager().getVersion()) {
+                case V_1_19_3, V_1_19_4 -> yamlDoc.set("mode", "NMS");
+                default -> yamlDoc.set("mode", "PACKET");
+            }
             yamlDoc.set("setup-mode", false);
             try {
                 yamlDoc.save();
@@ -97,9 +102,13 @@ public final class AntiPopup extends JavaPlugin {
         }
 
         if (yamlDoc.getString("mode").equals("NMS")) {
-            if (PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19_3)) {
-                getServer().getPluginManager().registerEvents(new PlayerListener(new PlayerInjector()), this);
+            PluginManager pluginManager = getServer().getPluginManager();
+            ServerManager serverManager = PacketEvents.getAPI().getServerManager();
+            switch (serverManager.getVersion()) {
+                case V_1_19_4 -> pluginManager.registerEvents(new PlayerListener(new PlayerInjector_v1_19_4()), this);
+                case V_1_19_3 -> pluginManager.registerEvents(new PlayerListener(new PlayerInjector_v1_19_3()), this);
             }
+            getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
         }
 
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());

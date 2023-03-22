@@ -1,74 +1,41 @@
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id "io.papermc.paperweight.userdev" version "1.5.1"
-}
-
-group = "com.github.kaspiandev"
-version = "5.4"
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-    maven { url "https://repo.codemc.io/repository/maven-snapshots/" }
-    maven {
-        name = "spigotmc-repo"
-        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
-    }
-    maven {
-        name = "sonatype"
-        url = "https://oss.sonatype.org/content/groups/public/"
-    }
-    maven {
-        name = "No."
-        url = "https://repo.viaversion.com"
-    }
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot:1.19.3-R0.1-SNAPSHOT:remapped-mojang"
-    compileOnly "dev.dejvokep:boosted-yaml-spigot:1.3"
-    compileOnly "org.apache.commons:commons-configuration2:2.8.0"
-    compileOnly "com.viaversion:viaversion:4.5.1"
-    compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
-
-    implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation "com.github.retrooper.packetevents:spigot:2.0.0-20230220.152043-146"
-
-    paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.19.3-R0.1-SNAPSHOT"
+    implementation project(path: ":main", configuration: "shadow")
 }
 
 tasks {
-    assemble {
-        dependsOn(reobfJar)
+    build {
+        dependsOn(shadowJar)
     }
     shadowJar {
-        minimize()
-        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.io.github.retrooper.packetevents")
-        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.com.github.retrooper.packetevents")
-        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.org.bstats")
-        dependencies {
-            exclude(dependency("com.google.code.gson:gson:2.8.0"))
+        archiveClassifier = ""
+    }
+}
+
+allprojects {
+
+    group = "com.github.kaspiandev.antipopup"
+    version = "5.5"
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven { url "https://repo.codemc.io/repository/maven-snapshots/" }
+        maven {
+            name = "spigotmc-repo"
+            url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
         }
-    }
-}
-
-def targetJavaVersion = 17
-
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
-processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset "UTF-8"
-    filesMatching("plugin.yml") {
-        expand props
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/groups/public/"
+        }
+        maven {
+            name = "No."
+            url = "https://repo.viaversion.com"
+        }
     }
 }

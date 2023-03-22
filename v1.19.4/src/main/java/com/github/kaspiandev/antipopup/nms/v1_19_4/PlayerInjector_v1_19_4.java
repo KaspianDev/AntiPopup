@@ -1,4 +1,4 @@
-package com.github.kaspiandev.antipopup.nms.v1_19_3;
+package com.github.kaspiandev.antipopup.nms.v1_19_4;
 
 import com.github.kaspiandev.antipopup.nms.AbstractInjector;
 import io.netty.channel.*;
@@ -7,13 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-public class PlayerInjector implements AbstractInjector {
+public class PlayerInjector_v1_19_4 implements AbstractInjector {
 
     public void inject(Player player) {
         ChannelDuplexHandler duplexHandler = new ChannelDuplexHandler() {
@@ -34,14 +34,12 @@ public class PlayerInjector implements AbstractInjector {
                 super.write(ctx, packet, promise);
             }
         };
-
-        ChannelPipeline pipeline = ((CraftPlayer) player).getHandle()
-                                           .connection.getConnection().channel.pipeline();
-        pipeline.addBefore("packet_handler", "antipopup_handler", duplexHandler);
+        Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+        channel.pipeline().addBefore("packet_handler", "antipopup_handler", duplexHandler);
     }
 
     public void uninject(Player player) {
-        Channel channel = ((CraftPlayer) player).getHandle().connection.getConnection().channel;
+        Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
         channel.eventLoop().submit(() -> {
             channel.pipeline().remove(player.getName());
             return null;
