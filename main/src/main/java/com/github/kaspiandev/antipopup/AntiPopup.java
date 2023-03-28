@@ -114,8 +114,7 @@ public final class AntiPopup extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
         getLogger().info("Commands registered.");
 
-        if (yamlDoc.getBoolean("filter-not-secure")
-                    || yamlDoc.getBoolean("sync-time-suppress")) {
+        if (yamlDoc.getBoolean("filter-not-secure")) {
             ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
             getLogger().info("Logger filter enabled.");
         } else {
