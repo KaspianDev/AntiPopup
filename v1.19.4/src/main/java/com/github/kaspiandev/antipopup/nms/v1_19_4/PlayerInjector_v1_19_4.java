@@ -15,6 +15,12 @@ import java.util.Optional;
 
 public class PlayerInjector_v1_19_4 implements AbstractInjector {
 
+    static {
+        // https://nms.screamingsandals.org/1.19.4/net/minecraft/server/network/ServerGamePacketListenerImpl.html
+        // Field "PlayerConnection.h" (ServerGamePacketListenerImpl.connection in mojang maps) is not public in 1.19.4
+        ServerGamePacketListenerImpl.class.getDeclaredField("h").setAccessible(true);
+    }
+
     public void inject(Player player) {
         ChannelDuplexHandler duplexHandler = new ChannelDuplexHandler() {
             @Override
