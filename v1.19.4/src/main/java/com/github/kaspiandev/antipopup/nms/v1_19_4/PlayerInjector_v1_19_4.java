@@ -2,6 +2,7 @@ package com.github.kaspiandev.antipopup.nms.v1_19_4;
 
 import com.github.kaspiandev.antipopup.nms.AbstractInjector;
 import io.netty.channel.*;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
@@ -12,17 +13,25 @@ import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.Optional;
 
 public class PlayerInjector_v1_19_4 implements AbstractInjector {
 
     static {
+        // https://nms.screamingsandals.org/1.19.4/net/minecraft/server/network/ServerGamePacketListenerImpl.html
+        // Field "PlayerConnection.h" (ServerGamePacketListenerImpl.connection in mojang maps) is not public in 1.19.4
         try {
-            // https://nms.screamingsandals.org/1.19.4/net/minecraft/server/network/ServerGamePacketListenerImpl.html
-            // Field "PlayerConnection.h" (ServerGamePacketListenerImpl.connection in mojang maps) is not public in 1.19.4
-            ServerGamePacketListenerImpl.class.getDeclaredField("h").setAccessible(true);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Couldn't make connection field accessible", e);
+            // This should work on all versions, no matter how the field is called
+            for (Field field : ServerGamePacketListenerImpl.class.getDeclaredFields()) {
+                if (field.getType().equals(Connection.class)) {
+                    field.setAccessible(true);
+                    break;
+                }
+            }
+        } catch (SecurityException | InaccessibleObjectException exception) {
+            throw new RuntimeException("Could not make \"connection\" field accessible", exception);
         }
     }
 
