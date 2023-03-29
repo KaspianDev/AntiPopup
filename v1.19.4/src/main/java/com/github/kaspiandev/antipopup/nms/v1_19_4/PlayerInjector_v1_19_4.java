@@ -6,6 +6,7 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
@@ -16,9 +17,13 @@ import java.util.Optional;
 public class PlayerInjector_v1_19_4 implements AbstractInjector {
 
     static {
-        // https://nms.screamingsandals.org/1.19.4/net/minecraft/server/network/ServerGamePacketListenerImpl.html
-        // Field "PlayerConnection.h" (ServerGamePacketListenerImpl.connection in mojang maps) is not public in 1.19.4
-        ServerGamePacketListenerImpl.class.getDeclaredField("h").setAccessible(true);
+        try {
+            // https://nms.screamingsandals.org/1.19.4/net/minecraft/server/network/ServerGamePacketListenerImpl.html
+            // Field "PlayerConnection.h" (ServerGamePacketListenerImpl.connection in mojang maps) is not public in 1.19.4
+            ServerGamePacketListenerImpl.class.getDeclaredField("h").setAccessible(true);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Couldn't make connection field accessible", e);
+        }
     }
 
     public void inject(Player player) {
