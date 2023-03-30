@@ -37,7 +37,6 @@ public class PlayerInjector_v1_19_4 implements AbstractInjector {
         } catch (SecurityException | InaccessibleObjectException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void inject(Player player) {
