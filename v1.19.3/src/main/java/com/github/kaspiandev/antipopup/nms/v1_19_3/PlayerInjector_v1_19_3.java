@@ -47,4 +47,5 @@ public class PlayerInjector_v1_19_3 implements AbstractInjector {
             return null;
         });
     }
+
 }

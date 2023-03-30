@@ -8,23 +8,19 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.message.Message;
-import org.bukkit.plugin.Plugin;
 
-    public class LogFilter implements Filter {
+public class LogFilter implements Filter {
 
     private final YamlDocument yamlDoc = AntiPopup.getYamlDoc();
 
     @Override
     public Filter.Result filter(LogEvent event) {
-
-        // We wanna eliminate possibilities of false catches.
         if (yamlDoc.getBoolean("filter-not-secure")
-                    && event.getMessage().getFormattedMessage().contains("[Not Secure] ")
-                    && event.getLoggerName().equals("net.minecraft.server.MinecraftServer")
-                    && event.getLevel() == Level.INFO) {
+                && event.getMessage().getFormattedMessage().contains("[Not Secure]")
+                && event.getLoggerName().equals("net.minecraft.server.MinecraftServer")
+                && event.getLevel() == Level.INFO) {
             LogManager.getLogger(event.getLoggerName()).log(event.getLevel(),
-                    event.getMessage().getFormattedMessage()
-                            .replace("[Not Secure] ", ""));
+                    () -> event.getMessage().getFormattedMessage().replace("[Not Secure] ", ""));
             return Filter.Result.DENY;
         }
         return Filter.Result.NEUTRAL;
@@ -112,17 +108,17 @@ import org.bukkit.plugin.Plugin;
 
     @Override
     public void initialize() {
-
+        /* ... */
     }
 
     @Override
     public void start() {
-
+        /* ... */
     }
 
     @Override
     public void stop() {
-
+        /* ... */
     }
 
     @Override

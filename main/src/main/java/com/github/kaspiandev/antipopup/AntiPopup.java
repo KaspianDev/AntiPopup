@@ -69,7 +69,7 @@ public final class AntiPopup extends JavaPlugin {
         }
 
         if (getPluginManager().getPlugin("ViaVersion") != null
-                    && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19)) {
+                && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19)) {
             try {
                 var hookClass = ViaHook.class;
                 hookClass.getConstructor().newInstance();
@@ -174,4 +174,5 @@ public final class AntiPopup extends JavaPlugin {
     public static YamlDocument getYamlDoc() {
         return yamlDoc;
     }
+
 }

@@ -25,6 +25,7 @@ public class ViaHook {
     }
 
     private static class ServerDataRemapper extends PacketRemapper {
+
         @Override
         public void registerMap() {
             map(Type.OPTIONAL_COMPONENT);
@@ -32,5 +33,7 @@ public class ViaHook {
             map(Type.BOOLEAN);
             create(Type.BOOLEAN, true);
         }
+
     }
+
 }

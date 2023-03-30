@@ -5,5 +5,7 @@ import org.bukkit.entity.Player;
 public interface AbstractInjector {
 
     void inject(Player player);
+
     void uninject(Player player);
+
 }
