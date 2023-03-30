@@ -34,8 +34,8 @@ public class PlayerInjector_v1_19_4 implements AbstractInjector {
                     break;
                 }
             }
-        } catch (SecurityException | InaccessibleObjectException exception) {
-            throw new RuntimeException("Could not make \"connection\" field accessible", exception);
+        } catch (SecurityException | InaccessibleObjectException e) {
+            throw new RuntimeException(e);
         }
 
     }
