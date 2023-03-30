@@ -22,8 +22,8 @@ dont-send-header: true
 # Useful for all kinds of setups or server hosts.
 auto-setup: false
 
-# NMS - Only for 1.19.3
-# PACKET - Only up to 1.19.2
+# NMS - Only for 1.19.3 and 1.19.4.
+# PACKET - Only up to 1.19.2.
 mode: PACKET
 
 # Readd clickable URLs in messages.
