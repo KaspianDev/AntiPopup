@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class PlayerInjector_v1_19_3 implements AbstractInjector {
 
     public void inject(Player player) {
@@ -46,4 +47,5 @@ public class PlayerInjector_v1_19_3 implements AbstractInjector {
             return null;
         });
     }
+
 }

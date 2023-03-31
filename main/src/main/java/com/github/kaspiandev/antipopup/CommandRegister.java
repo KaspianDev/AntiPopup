@@ -22,13 +22,11 @@ public class CommandRegister implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender,
                              @NotNull Command cmd,
                              @NotNull String label,
-                             String[] args) {
-
-        Api api = new Api(instance);
-
+                             @NotNull String[] args) {
         if (args.length == 1
                 && sender instanceof ConsoleCommandSender) {
             if ("setup".equals(args[0])) {
+                Api api = new Api(instance);
                 api.setupAntiPopup(100);
             } else if ("reload".equals(args[0])) {
                 try {
@@ -42,4 +40,5 @@ public class CommandRegister implements CommandExecutor {
         }
         return false;
     }
+
 }

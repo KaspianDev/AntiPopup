@@ -28,4 +28,5 @@ public class ChatListener implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(new AsyncPlayerChatEvent(
                 true, sender, event.getMessage(), Set.of()));
     }
+
 }

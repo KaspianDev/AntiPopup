@@ -32,10 +32,11 @@ public class Api {
             props.load(in);
             if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
                 props.setProperty("enforce-secure-profile", String.valueOf(false));
-                in.close();
-                FileOutputStream out = new FileOutputStream("server.properties");
-                props.store(out, "Minecraft server properties");
-                out.close();
+                try (FileOutputStream out = new FileOutputStream("server.properties")) {
+                    props.store(out, "Minecraft server properties");
+                } catch (IOException e) {
+                    // Handle the exception appropriately
+                }
                 getLogger().warning("-----------------[ READ ME ]-----------------");
                 getLogger().warning("Plugin is set up fully now. We changed value");
                 getLogger().warning("of enforce-secure-chat in server.properties.");
@@ -53,4 +54,5 @@ public class Api {
             io.printStackTrace();
         }
     }
+
 }

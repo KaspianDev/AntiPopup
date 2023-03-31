@@ -38,8 +38,8 @@ public class PacketEventsListener extends PacketListenerAbstract {
             serverData.setEnforceSecureChat(true);
         }
         if (event.getPacketType() == PacketType.Play.Server.CHAT_MESSAGE
-                    && yamlDoc.getBoolean("strip-signature")
-                    && yamlDoc.getString("mode").equals("PACKET")) {
+                && yamlDoc.getBoolean("strip-signature")
+                && yamlDoc.getString("mode").equals("PACKET")) {
             WrapperPlayServerChatMessage chatMessage = new WrapperPlayServerChatMessage(event);
             ChatMessage message = chatMessage.getMessage();
             if (message instanceof ChatMessage_v1_19_1 v1_19_1) {
@@ -50,8 +50,9 @@ public class PacketEventsListener extends PacketListenerAbstract {
             }
         }
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER
-                    && yamlDoc.getBoolean("dont-send-header")) {
+                && yamlDoc.getBoolean("dont-send-header")) {
             event.setCancelled(true);
         }
     }
+
 }
