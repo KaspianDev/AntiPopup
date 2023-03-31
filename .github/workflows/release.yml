@@ -21,11 +21,6 @@ jobs:
           
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-      
-    - uses: SpraxDev/Action-SpigotMC@v4
-      with:
-        versions: 1.19.3
-        remapped: true
           
     - name: Build artifacts
       run: ./gradlew build
