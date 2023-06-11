@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "io.papermc.paperweight.userdev" version "1.5.4-SNAPSHOT"
+    id "io.papermc.paperweight.userdev" version "${userdevVer}"
 }
 
 dependencies {

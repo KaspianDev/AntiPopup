@@ -25,7 +25,7 @@ public class Api {
      *
      * @param time Delay of the setup.
      */
-    public void setupAntiPopup(int time) {
+    public void setupAntiPopup(int time, boolean silent) {
         try {
             FileInputStream in = new FileInputStream("server.properties");
             Properties props = new Properties();
@@ -34,20 +34,21 @@ public class Api {
                 props.setProperty("enforce-secure-profile", String.valueOf(false));
                 try (FileOutputStream out = new FileOutputStream("server.properties")) {
                     props.store(out, "Minecraft server properties");
-                } catch (IOException e) {
-                    // Handle the exception appropriately
-                }
-                getLogger().warning("-----------------[ READ ME ]-----------------");
-                getLogger().warning("Plugin is set up fully now. We changed value");
-                getLogger().warning("of enforce-secure-chat in server.properties.");
-                getLogger().warning("");
-                getLogger().warning("Server will restart in five seconds.");
-                getLogger().warning("---------------------------------------------");
+                } catch (IOException ignored) {}
+                getLogger().warning(
+                """
+                -----------------[ READ ME ]-----------------
+                Plugin is set up fully now. We changed value
+                of enforce-secure-chat in server.properties.
+                
+                Server will restart in five seconds.
+                ---------------------------------------------
+               """);
                 getScheduler().runTaskLater(instance, () -> {
                     PacketEvents.getAPI().terminate();
                     getServer().spigot().restart();
                 }, time);
-            } else {
+            } else if (!silent) {
                 getLogger().info("AntiPopup has been already set up.");
             }
         } catch (IOException io) {
