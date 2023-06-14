@@ -3,6 +3,7 @@ package com.github.kaspiandev.antipopup;
 import com.github.kaspiandev.antipopup.api.Api;
 import com.github.kaspiandev.antipopup.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.listeners.PacketEventsListener;
+import com.github.kaspiandev.antipopup.message.ConsoleMessages;
 import com.github.kaspiandev.antipopup.nms.PlayerListener;
 import com.github.kaspiandev.antipopup.nms.v1_19_2.PlayerInjector_v1_19_2;
 import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector_v1_19_3;
@@ -11,6 +12,7 @@ import com.github.kaspiandev.antipopup.nms.v1_20.PlayerInjector_v1_20;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.tcoded.folialib.FoliaLib;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -31,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import static org.bukkit.Bukkit.getPluginManager;
 
@@ -38,6 +41,7 @@ public final class AntiPopup extends JavaPlugin {
 
     private static YamlDocument yamlDoc;
     private static Plugin instance;
+    private static FoliaLib foliaLib;
 
     @Override
     public void onLoad() {
@@ -50,6 +54,7 @@ public final class AntiPopup extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        foliaLib = new FoliaLib(this);
         try {
             yamlDoc = YamlDocument.create(new File(getDataFolder(), "config.yml"),
                     Objects.requireNonNull(getResource("config.yml")),
@@ -96,11 +101,7 @@ public final class AntiPopup extends JavaPlugin {
         if (yamlDoc.getBoolean("block-chat-reports")
                 && serverManager.getVersion().isOlderThan(ServerVersion.V_1_19_1)) {
             yamlDoc.set("block-chat-reports", false);
-            getLogger().warning(
-                    """
-                    Blocking chat reports was enabled but your server
-                    version doesn't support it. Exiting.
-                    """);
+            ConsoleMessages.log(ConsoleMessages.BLOCKING_REPORTS_UNSUPPORTED, getLogger()::severe);
             Bukkit.getServer().getPluginManager().disablePlugin(this);
         }
 
@@ -131,24 +132,15 @@ public final class AntiPopup extends JavaPlugin {
             }
         }
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            if (yamlDoc.getBoolean("auto-setup")) new Api(instance).setupAntiPopup(80, true);
+        foliaLib.getImpl().runLater(() -> {
+            if (yamlDoc.getBoolean("auto-setup")) Api.setupAntiPopup(80, true);
             if (yamlDoc.getBoolean("first-run")) {
                 try {
                     FileInputStream in = new FileInputStream("server.properties");
                     Properties props = new Properties();
                     props.load(in);
                     if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
-                        getLogger().warning(
-                                """
-                                ------------------[ READ ME PLEASE ]------------------
-                                This is your first startup with AntiPopup.
-                                Run command 'antipopup setup' to disable
-                                enforce-secure-profile for better experience.
-                                This will not force players to sign their messages.
-                                Thanks for using AntiPopup!
-                                ------------------------------------------------------
-                                """);
+                        ConsoleMessages.log(ConsoleMessages.ASK_SETUP, getLogger()::warning);
                     }
                     in.close();
                     yamlDoc.save();
@@ -158,23 +150,14 @@ public final class AntiPopup extends JavaPlugin {
             }
             if (yamlDoc.getBoolean("ask-bstats")) {
                 try {
-                    getLogger().warning(
-                    """
-                    --------------------[ READ ME PLEASE ]--------------------
-                    This is your first startup with AntiPopup.
-                    I would like to kindly ask you to enable bstats
-                    configuration value to help me improve AntiPopup.
-                    Because I respect your freedom it's disabled by default.
-                    Thanks for using AntiPopup! (you will not see this again)
-                    ----------------------------------------------------------
-                    """);
+                    ConsoleMessages.log(ConsoleMessages.ASK_BSTATS, getLogger()::warning);
                     yamlDoc.set("ask-bstats", false);
                     yamlDoc.save();
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
             }
-        }, 5);
+        }, 5 * 50L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -189,6 +172,10 @@ public final class AntiPopup extends JavaPlugin {
 
     public static YamlDocument getYamlDoc() {
         return yamlDoc;
+    }
+
+    public static FoliaLib getFoliaLib() {
+        return foliaLib;
     }
 
 }

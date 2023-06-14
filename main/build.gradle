@@ -5,6 +5,13 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+repositories {
+    maven {
+        name = "devmart-other"
+        url = "https://nexuslite.gcnt.net/repos/other/"
+    }
+}
+
 dependencies {
     implementation project(path: ":shared")
     implementation project(path: ":v1.19.2", configuration: "reobf")
@@ -19,6 +26,7 @@ dependencies {
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
     implementation "com.github.retrooper.packetevents:spigot:2.0.0-SNAPSHOT"
+    implementation "com.tcoded:FoliaLib:0.2.3"
 }
 
 tasks {
@@ -27,10 +35,11 @@ tasks {
     }
     shadowJar {
         minimize()
-        relocate("io.github.retrooper", "com.github.kaspiandev.antipopup.libs.io.github.retrooper")
-        relocate("com.github.retrooper", "com.github.kaspiandev.antipopup.libs.com.github.retrooper")
-        relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.net.kyori")
-        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.org.bstats")
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
+        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
+        relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")
         dependencies {
             exclude(dependency("com.google.code.gson:gson:2.8.0"))
         }

@@ -26,8 +26,7 @@ public class CommandRegister implements CommandExecutor {
         if (args.length == 1
                 && sender instanceof ConsoleCommandSender) {
             if ("setup".equals(args[0])) {
-                Api api = new Api(instance);
-                api.setupAntiPopup(100, false);
+                Api.setupAntiPopup(100, false);
             } else if ("reload".equals(args[0])) {
                 try {
                     yamlDoc.reload();
