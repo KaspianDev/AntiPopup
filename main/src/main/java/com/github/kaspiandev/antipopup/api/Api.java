@@ -1,22 +1,21 @@
 package com.github.kaspiandev.antipopup.api;
 
+import com.github.kaspiandev.antipopup.AntiPopup;
+import com.github.kaspiandev.antipopup.message.ConsoleMessages;
 import com.github.retrooper.packetevents.PacketEvents;
-import org.bukkit.plugin.Plugin;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import static org.bukkit.Bukkit.*;
+import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.getServer;
 
 public class Api {
 
-    private final Plugin instance;
-
-    public Api(Plugin instance) {
-        this.instance = instance;
-    }
+    private Api() {}
 
     /**
      * This "sets up" the plugin aka changes
@@ -25,7 +24,7 @@ public class Api {
      *
      * @param time Delay of the setup.
      */
-    public void setupAntiPopup(int time) {
+    public static void setupAntiPopup(int time, boolean silent) {
         try {
             FileInputStream in = new FileInputStream("server.properties");
             Properties props = new Properties();
@@ -34,20 +33,13 @@ public class Api {
                 props.setProperty("enforce-secure-profile", String.valueOf(false));
                 try (FileOutputStream out = new FileOutputStream("server.properties")) {
                     props.store(out, "Minecraft server properties");
-                } catch (IOException e) {
-                    // Handle the exception appropriately
-                }
-                getLogger().warning("-----------------[ READ ME ]-----------------");
-                getLogger().warning("Plugin is set up fully now. We changed value");
-                getLogger().warning("of enforce-secure-chat in server.properties.");
-                getLogger().warning("");
-                getLogger().warning("Server will restart in five seconds.");
-                getLogger().warning("---------------------------------------------");
-                getScheduler().runTaskLater(instance, () -> {
+                } catch (IOException ignored) {}
+                ConsoleMessages.log(ConsoleMessages.SETUP_SUCCESS, getLogger()::warning);
+                AntiPopup.getFoliaLib().getImpl().runLater(() -> {
                     PacketEvents.getAPI().terminate();
                     getServer().spigot().restart();
-                }, time);
-            } else {
+                }, time * 50L, TimeUnit.MILLISECONDS);
+            } else if (!silent) {
                 getLogger().info("AntiPopup has been already set up.");
             }
         } catch (IOException io) {

@@ -1,4 +1,4 @@
-config-version: 29
+config-version: 30
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -10,10 +10,6 @@ bstats: false
 # incident to Github issues of AntiPopup.
 filter-not-secure: true
 
-# Should we prevent messages from being reported?
-# Leave as true unless you have a different plugin stripping those.
-strip-signature: true
-
 # We dont need that packet if
 # we dont sign messages.
 dont-send-header: true
@@ -22,9 +18,9 @@ dont-send-header: true
 # Useful for all kinds of setups or server hosts.
 auto-setup: false
 
-# NMS - Only for 1.19.3 and 1.19.4.
-# PACKET - Only up to 1.19.2.
-mode: PACKET
+# Should reporting chat messages be prevented?
+# Only works for versions above 1.19(.0).
+block-chat-reports: true
 
 # Readd clickable URLs in messages.
 # Could cause incompabilities!
