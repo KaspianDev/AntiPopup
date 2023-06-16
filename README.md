@@ -23,8 +23,8 @@ A: Popup will be shown for 1.19.2 clients spoofing to 1.19, nothing I can fix on
 Donations are not required but they help me assign more time to improve the software. After donating message me on discord to add you to supporters list on marketplaces.
 
 Available options are: \
-[![liberapay](https://liberapay.com/assets/widgets/donate.svg "")](https://liberapay.com/Kaspian/donate "") \
+[![liberapay](https://liberapay.com/assets/widgets/donate.svg "")](https://liberapay.com/Kaspian/donate "")
 [![ko-fi](https://i.imgur.com/TUJMO7O.png "")](https://ko-fi.com/kaspiandev "")
 
 **Need Help?** \
-Message me on [matrix]('https://matrix.to/#/#future-project:matrix.org') or [discord]('https://discord.gg/eak2zA4s6m').
+Message me on [matrix](https://matrix.to/#/#future-project:matrix.org) or [discord](https://discord.gg/eak2zA4s6m).
