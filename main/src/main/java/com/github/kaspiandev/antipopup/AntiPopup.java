@@ -102,13 +102,14 @@ public final class AntiPopup extends JavaPlugin {
                 && serverManager.getVersion().isOlderThan(ServerVersion.V_1_19_1)) {
             yamlDoc.set("block-chat-reports", false);
             ConsoleMessages.log(ConsoleMessages.BLOCKING_REPORTS_UNSUPPORTED, getLogger()::severe);
-            Bukkit.getServer().getPluginManager().disablePlugin(this);
+            pluginManager.disablePlugin(this);
+            return;
         }
 
         if (yamlDoc.getBoolean("block-chat-reports")) {
             PlayerListener playerListener = null;
             switch (serverManager.getVersion()) {
-                case V_1_20 -> playerListener = new PlayerListener(new PlayerInjector_v1_20());
+                case V_1_20, V_1_20_1 -> playerListener = new PlayerListener(new PlayerInjector_v1_20());
                 case V_1_19_4 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_4());
                 case V_1_19_3 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_3());
                 case V_1_19_1, V_1_19_2 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_2());
@@ -116,6 +117,7 @@ public final class AntiPopup extends JavaPlugin {
             if (playerListener == null) {
                 getLogger().severe("No supported server version found! Exiting.");
                 pluginManager.disablePlugin(this);
+                return;
             } else {
                 pluginManager.registerEvents(playerListener, this);
                 getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
