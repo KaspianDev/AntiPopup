@@ -19,7 +19,7 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         Player sender = event.getPlayer();
-        String message = String.format(event.getFormat(), sender.getName(), event.getMessage());
+        String message = String.format(event.getFormat(), sender.getDisplayName(), event.getMessage());
 
         Bukkit.getConsoleSender().sendMessage(message);
         for (Player player : event.getRecipients()) {
