@@ -3,6 +3,7 @@ package com.github.kaspiandev.antipopup.listeners;
 import com.github.kaspiandev.antipopup.AntiPopup;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -34,6 +35,13 @@ public class PacketEventsListener extends PacketListenerAbstract {
         }
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_CHAT_HEADER
                 && yamlDoc.getBoolean("dont-send-header")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @Override
+    public void onPacketReceive(PacketReceiveEvent event) {
+        if (event.getPacketType() == PacketType.Play.Client.CHAT_SESSION_UPDATE) {
             event.setCancelled(true);
         }
     }
