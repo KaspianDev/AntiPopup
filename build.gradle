@@ -18,7 +18,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "6.1"
+    version = "6.2"
 
     repositories {
         mavenCentral()
@@ -37,4 +37,11 @@ allprojects {
             url = "https://repo.viaversion.com"
         }
     }
+}
+
+tasks.register("buildAndMove", Copy) {
+    from jar
+    into "/home/kaspian/Documents/Minecraft/Backend/plugins"
+
+    dependsOn(tasks.build)
 }
