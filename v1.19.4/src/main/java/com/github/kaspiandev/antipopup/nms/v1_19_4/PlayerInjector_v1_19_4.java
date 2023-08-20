@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
@@ -60,7 +61,9 @@ public class PlayerInjector_v1_19_4 implements AbstractInjector {
         };
         ServerGamePacketListenerImpl listener = ((CraftPlayer) player).getHandle().connection;
         Channel channel = getConnection(listener).channel;
-        channel.pipeline().addBefore("packet_handler", "antipopup_handler", duplexHandler);
+        try {
+            channel.pipeline().addBefore("packet_handler", "antipopup_handler", duplexHandler);
+        } catch (NoSuchElementException ignored) {}
     }
 
     public void uninject(Player player) {
