@@ -11,7 +11,6 @@ import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
@@ -38,15 +37,13 @@ public class PlayerInjector_v1_19_3 implements AbstractInjector {
         };
 
         ChannelPipeline pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        try {
-            pipeline.addBefore("packet_handler", "antipopup_handler", duplexHandler);
-        } catch (NoSuchElementException ignored) {}
+        pipeline.addBefore("packet_handler", "antipopup_handler", duplexHandler);
     }
 
     public void uninject(Player player) {
         Channel channel = ((CraftPlayer) player).getHandle().connection.getConnection().channel;
         channel.eventLoop().submit(() -> {
-            channel.pipeline().remove(player.getName());
+            channel.pipeline().remove("antipopup_handler");
             return null;
         });
     }

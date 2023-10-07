@@ -1,4 +1,4 @@
-package com.github.kaspiandev.antipopup.nms.v1_19_4;
+package com.github.kaspiandev.antipopup.nms.v1_20_2;
 
 import com.github.kaspiandev.antipopup.nms.AbstractInjector;
 import io.netty.channel.Channel;
@@ -10,10 +10,11 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -21,13 +22,13 @@ import java.lang.reflect.InaccessibleObjectException;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class PlayerInjector_v1_19_4 implements AbstractInjector {
+public class PlayerInjector_v1_20_2 implements AbstractInjector {
 
     private static Field connectionField;
 
     static {
         try {
-            for (Field field : ServerGamePacketListenerImpl.class.getDeclaredFields()) {
+            for (Field field : ServerCommonPacketListenerImpl.class.getDeclaredFields()) {
                 if (field.getType().equals(Connection.class)) {
                     field.setAccessible(true);
                     connectionField = field;

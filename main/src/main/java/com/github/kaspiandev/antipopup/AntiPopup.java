@@ -9,6 +9,7 @@ import com.github.kaspiandev.antipopup.nms.v1_19_2.PlayerInjector_v1_19_2;
 import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector_v1_19_3;
 import com.github.kaspiandev.antipopup.nms.v1_19_4.PlayerInjector_v1_19_4;
 import com.github.kaspiandev.antipopup.nms.v1_20.PlayerInjector_v1_20;
+import com.github.kaspiandev.antipopup.nms.v1_20_2.PlayerInjector_v1_20_2;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -31,6 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +63,7 @@ public final class AntiPopup extends JavaPlugin {
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"))
-                            .build());
+                                   .build());
             getLogger().info("Config enabled.");
         } catch (IOException ex) {
             getLogger().warning("Config file could not be initialized.");
@@ -81,8 +83,9 @@ public final class AntiPopup extends JavaPlugin {
                 var hookClass = ViaHook.class;
                 hookClass.getConstructor().newInstance();
                 getLogger().info("Enabled 1.19 ViaVersion Hook.");
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                     NoSuchMethodException ex) {
+                throw new RuntimeException(ex);
             }
         }
 
@@ -102,26 +105,24 @@ public final class AntiPopup extends JavaPlugin {
                 && serverManager.getVersion().isOlderThan(ServerVersion.V_1_19_1)) {
             yamlDoc.set("block-chat-reports", false);
             ConsoleMessages.log(ConsoleMessages.BLOCKING_REPORTS_UNSUPPORTED, getLogger()::severe);
-            pluginManager.disablePlugin(this);
-            return;
+            throw new IllegalStateException("Blocking chat reports was enabled but your server version isn't supported!");
         }
 
         if (yamlDoc.getBoolean("block-chat-reports")) {
-            PlayerListener playerListener = null;
-            switch (serverManager.getVersion()) {
-                case V_1_20, V_1_20_1 -> playerListener = new PlayerListener(new PlayerInjector_v1_20());
-                case V_1_19_4 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_4());
-                case V_1_19_3 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_3());
-                case V_1_19_1, V_1_19_2 -> playerListener = new PlayerListener(new PlayerInjector_v1_19_2());
-            }
-            if (playerListener == null) {
-                getLogger().severe("No supported server version found! Exiting.");
-                pluginManager.disablePlugin(this);
-                return;
-            } else {
-                pluginManager.registerEvents(playerListener, this);
-                getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
-            }
+            PlayerListener playerListener = switch (serverManager.getVersion()) {
+                case V_1_20_2 -> {
+                    ConsoleMessages.log(ConsoleMessages.EXPERIMENTAL_SUPPORT, getLogger()::warning);
+                    yield new PlayerListener(new PlayerInjector_v1_20_2());
+                }
+                case V_1_20, V_1_20_1 -> new PlayerListener(new PlayerInjector_v1_20());
+                case V_1_19_4 -> new PlayerListener(new PlayerInjector_v1_19_4());
+                case V_1_19_3 -> new PlayerListener(new PlayerInjector_v1_19_3());
+                case V_1_19_1, V_1_19_2 -> new PlayerListener(new PlayerInjector_v1_19_2());
+                default -> throw new IllegalStateException("No valid injector found for the server version!");
+            };
+
+            pluginManager.registerEvents(playerListener, this);
+            getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
 
             Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister());
             getLogger().info("Commands registered.");
@@ -146,8 +147,8 @@ public final class AntiPopup extends JavaPlugin {
                     }
                     in.close();
                     yamlDoc.save();
-                } catch (IOException io) {
-                    io.printStackTrace();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
             if (yamlDoc.getBoolean("ask-bstats")) {
@@ -155,8 +156,8 @@ public final class AntiPopup extends JavaPlugin {
                     ConsoleMessages.log(ConsoleMessages.ASK_BSTATS, getLogger()::warning);
                     yamlDoc.set("ask-bstats", false);
                     yamlDoc.save();
-                } catch (IOException io) {
-                    io.printStackTrace();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }, 5 * 50L, TimeUnit.MILLISECONDS);

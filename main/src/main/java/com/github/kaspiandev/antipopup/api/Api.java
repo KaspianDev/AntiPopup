@@ -17,6 +17,7 @@ public class Api {
 
     private Api() {}
 
+    // TODO: Refactor eventually
     /**
      * This "sets up" the plugin aka changes
      * enforce-secure-profile property in server.properties
@@ -26,24 +27,35 @@ public class Api {
      */
     public static void setupAntiPopup(int time, boolean silent) {
         try {
-            FileInputStream in = new FileInputStream("server.properties");
-            Properties props = new Properties();
-            props.load(in);
-            if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
-                props.setProperty("enforce-secure-profile", String.valueOf(false));
-                try (FileOutputStream out = new FileOutputStream("server.properties")) {
-                    props.store(out, "Minecraft server properties");
-                } catch (IOException ignored) {}
-                ConsoleMessages.log(ConsoleMessages.SETUP_SUCCESS, getLogger()::warning);
-                AntiPopup.getFoliaLib().getImpl().runLater(() -> {
-                    PacketEvents.getAPI().terminate();
-                    getServer().spigot().restart();
-                }, time * 50L, TimeUnit.MILLISECONDS);
-            } else if (!silent) {
-                getLogger().info("AntiPopup has been already set up.");
+            FileInputStream in = null;
+            try {
+                in = new FileInputStream("server.properties");
+                Properties props = new Properties();
+                props.load(in);
+                if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
+                    props.setProperty("enforce-secure-profile", String.valueOf(false));
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream("server.properties");
+                        props.store(out, "Minecraft server properties");
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    } finally {
+                        if (out != null) out.close();
+                    }
+                    ConsoleMessages.log(ConsoleMessages.SETUP_SUCCESS, getLogger()::warning);
+                    AntiPopup.getFoliaLib().getImpl().runLater(() -> {
+                        PacketEvents.getAPI().terminate();
+                        getServer().spigot().restart();
+                    }, time * 50L, TimeUnit.MILLISECONDS);
+                } else if (!silent) {
+                    getLogger().info("AntiPopup has been already set up.");
+                }
+            } finally {
+                if (in != null) in.close();
             }
-        } catch (IOException io) {
-            io.printStackTrace();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
