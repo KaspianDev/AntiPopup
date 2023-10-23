@@ -27,21 +27,15 @@ public class Api {
      */
     public static void setupAntiPopup(int time, boolean silent) {
         try {
-            FileInputStream in = null;
-            try {
-                in = new FileInputStream("server.properties");
+            try (FileInputStream in = new FileInputStream(AntiPopup.getPropertiesFile())) {
                 Properties props = new Properties();
                 props.load(in);
                 if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
                     props.setProperty("enforce-secure-profile", String.valueOf(false));
-                    FileOutputStream out = null;
-                    try {
-                        out = new FileOutputStream("server.properties");
+                    try (FileOutputStream out = new FileOutputStream(AntiPopup.getPropertiesFile())) {
                         props.store(out, "Minecraft server properties");
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
-                    } finally {
-                        if (out != null) out.close();
                     }
                     ConsoleMessages.log(ConsoleMessages.SETUP_SUCCESS, getLogger()::warning);
                     AntiPopup.getFoliaLib().getImpl().runLater(() -> {
@@ -51,8 +45,6 @@ public class Api {
                 } else if (!silent) {
                     getLogger().info("AntiPopup has been already set up.");
                 }
-            } finally {
-                if (in != null) in.close();
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);

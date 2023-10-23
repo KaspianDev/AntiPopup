@@ -18,7 +18,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "7"
+    version = "7.1"
 
     repositories {
         mavenCentral()
@@ -41,7 +41,7 @@ allprojects {
 
 tasks.register("buildAndMove", Copy) {
     from jar
-    into "/home/kaspian/Documents/Minecraft/Backend/plugins"
+    into "/home/kaspian/Documents/Minecraft/SpigotServer/plugins"
 
     dependsOn(tasks.build)
 }

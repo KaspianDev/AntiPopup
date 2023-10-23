@@ -1,4 +1,4 @@
-config-version: 30
+config-version: 31
 
 # Should we collect anonymous data about your server?
 # false by default.
@@ -25,6 +25,10 @@ block-chat-reports: true
 # Readd clickable URLs in messages.
 # Could cause incompabilities!
 clickable-urls: false
+
+# Location of server.properties file relative to server's folder.
+# Do not change unless needed.
+properties-location: server.properties
 
 # Do not touch ones below!
 first-run: true

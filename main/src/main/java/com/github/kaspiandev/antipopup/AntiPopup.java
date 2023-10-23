@@ -42,6 +42,7 @@ import static org.bukkit.Bukkit.getPluginManager;
 
 public final class AntiPopup extends JavaPlugin {
 
+    private static File propertiesFile;
     private static YamlDocument yamlDoc;
     private static Plugin instance;
     private static FoliaLib foliaLib;
@@ -70,6 +71,7 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().warning("Config file could not be initialized.");
             throw new RuntimeException(ex);
         }
+        propertiesFile = new File(Bukkit.getWorldContainer().getParentFile(), yamlDoc.getString("properties-location"));
 
         if (yamlDoc.getBoolean("bstats")) {
             Metrics metrics = new Metrics(this, 16308);
@@ -142,13 +144,14 @@ public final class AntiPopup extends JavaPlugin {
             if (yamlDoc.getBoolean("auto-setup")) Api.setupAntiPopup(80, true);
             if (yamlDoc.getBoolean("first-run")) {
                 try {
-                    FileInputStream in = new FileInputStream("server.properties");
+                    FileInputStream in = new FileInputStream(propertiesFile);
                     Properties props = new Properties();
                     props.load(in);
                     if (Boolean.parseBoolean(props.getProperty("enforce-secure-profile"))) {
                         ConsoleMessages.log(ConsoleMessages.ASK_SETUP, getLogger()::warning);
                     }
                     in.close();
+                    yamlDoc.set("first-run", false);
                     yamlDoc.save();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -182,6 +185,10 @@ public final class AntiPopup extends JavaPlugin {
 
     public static FoliaLib getFoliaLib() {
         return foliaLib;
+    }
+
+    public static File getPropertiesFile() {
+        return propertiesFile;
     }
 
 }
