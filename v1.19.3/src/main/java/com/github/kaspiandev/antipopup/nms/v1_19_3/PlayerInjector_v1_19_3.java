@@ -6,6 +6,7 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
@@ -15,6 +16,8 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class PlayerInjector_v1_19_3 implements AbstractInjector {
+
+    private static final String HANDLER_NAME = "antipopup_handler";
 
     public void inject(Player player) {
         ChannelDuplexHandler duplexHandler = new ChannelDuplexHandler() {
@@ -36,14 +39,23 @@ public class PlayerInjector_v1_19_3 implements AbstractInjector {
             }
         };
 
-        ChannelPipeline pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        pipeline.addBefore("packet_handler", "antipopup_handler", duplexHandler);
+        ServerGamePacketListenerImpl listener = ((CraftPlayer) player).getHandle().connection;
+        Channel channel = listener.getConnection().channel;
+        ChannelPipeline pipeline = channel.pipeline();
+
+        if (pipeline.get(HANDLER_NAME) != null) {
+            pipeline.remove(HANDLER_NAME);
+        }
+
+        channel.eventLoop().submit(() -> {
+            channel.pipeline().addBefore("packet_handler", HANDLER_NAME, duplexHandler);
+        });
     }
 
     public void uninject(Player player) {
         Channel channel = ((CraftPlayer) player).getHandle().connection.getConnection().channel;
         channel.eventLoop().submit(() -> {
-            channel.pipeline().remove("antipopup_handler");
+            channel.pipeline().remove(HANDLER_NAME);
             return null;
         });
     }

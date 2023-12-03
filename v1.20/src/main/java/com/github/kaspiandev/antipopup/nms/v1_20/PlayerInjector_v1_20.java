@@ -1,10 +1,7 @@
 package com.github.kaspiandev.antipopup.nms.v1_20;
 
 import com.github.kaspiandev.antipopup.nms.AbstractInjector;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.*;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -23,6 +20,7 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public class PlayerInjector_v1_20 implements AbstractInjector {
 
+    private static final String HANDLER_NAME = "antipopup_handler";
     private static Field connectionField;
 
     static {
@@ -61,14 +59,22 @@ public class PlayerInjector_v1_20 implements AbstractInjector {
 
         ServerGamePacketListenerImpl listener = ((CraftPlayer) player).getHandle().connection;
         Channel channel = getConnection(listener).channel;
-        channel.pipeline().addBefore("packet_handler", "antipopup_handler", duplexHandler);
+        ChannelPipeline pipeline = channel.pipeline();
+
+        if (pipeline.get(HANDLER_NAME) != null) {
+            pipeline.remove(HANDLER_NAME);
+        }
+
+        channel.eventLoop().submit(() -> {
+            channel.pipeline().addBefore("packet_handler", HANDLER_NAME, duplexHandler);
+        });
     }
 
     public void uninject(Player player) {
         ServerGamePacketListenerImpl listener = ((CraftPlayer) player).getHandle().connection;
         Channel channel = getConnection(listener).channel;
         channel.eventLoop().submit(() -> {
-            channel.pipeline().remove("antipopup_handler");
+            channel.pipeline().remove(HANDLER_NAME);
             return null;
         });
     }
