@@ -10,7 +10,7 @@ import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector_v1_19_3;
 import com.github.kaspiandev.antipopup.nms.v1_19_4.PlayerInjector_v1_19_4;
 import com.github.kaspiandev.antipopup.nms.v1_20.PlayerInjector_v1_20;
 import com.github.kaspiandev.antipopup.nms.v1_20_2.PlayerInjector_v1_20_2;
-import com.github.kaspiandev.antipopup.util.VersionUtil;
+import com.github.kaspiandev.antipopup.nms.v1_20_3.PlayerInjector_v1_20_3;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -113,12 +113,8 @@ public final class AntiPopup extends JavaPlugin {
 
         if (yamlDoc.getBoolean("block-chat-reports")) {
             PlayerListener playerListener = switch (serverManager.getVersion()) {
-                case V_1_20_2 -> {
-                    if (!ServerVersion.V_1_20_2.getReleaseName().equals(VersionUtil.getMinecraftVersion())) {
-                        throw new IllegalStateException("Minecraft version and server version are different!");
-                    }
-                    yield new PlayerListener(new PlayerInjector_v1_20_2());
-                }
+                case V_1_20_3, V_1_20_4 -> new PlayerListener(new PlayerInjector_v1_20_3());
+                case V_1_20_2 -> new PlayerListener(new PlayerInjector_v1_20_2());
                 case V_1_20, V_1_20_1 -> new PlayerListener(new PlayerInjector_v1_20());
                 case V_1_19_4 -> new PlayerListener(new PlayerInjector_v1_19_4());
                 case V_1_19_3 -> new PlayerListener(new PlayerInjector_v1_19_3());

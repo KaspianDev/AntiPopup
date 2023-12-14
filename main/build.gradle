@@ -1,5 +1,3 @@
-import java.util.concurrent.TimeUnit
-
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "7.1.2"
@@ -10,6 +8,10 @@ repositories {
         name = "devmart-other"
         url = "https://nexuslite.gcnt.net/repos/other/"
     }
+    maven {
+        name = "codemc"
+        url = "https://repo.codemc.io/repository/maven-releases/"
+    }
 }
 
 dependencies {
@@ -19,6 +21,7 @@ dependencies {
     implementation project(path: ":v1.19.4", configuration: "reobf")
     implementation project(path: ":v1.20", configuration: "reobf")
     implementation project(path: ":v1.20.2", configuration: "reobf")
+    implementation project(path: ":v1.20.3", configuration: "reobf")
 
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
     compileOnly "dev.dejvokep:boosted-yaml-spigot:1.3"
@@ -26,7 +29,7 @@ dependencies {
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation "com.github.retrooper.packetevents:spigot:2.1.0-20231127.180146-12"
+    implementation "com.github.retrooper.packetevents:spigot:2.2.0"
     implementation "com.tcoded:FoliaLib:0.2.3"
 }
 
@@ -45,10 +48,6 @@ tasks {
             exclude(dependency("com.google.code.gson:gson:2.8.0"))
         }
     }
-}
-
-configurations.configureEach {
-    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
 
 def targetJavaVersion = 17
