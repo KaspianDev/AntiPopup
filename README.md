@@ -1,4 +1,4 @@
-**For faster updates, priority support and a discord role purchase AntiPopup Pro on Polymart.**
+**For faster updates, priority support and a discord role purchase AntiPopup Pro on Polymart.**  
 Click the button below for more details.
 
 [![AntiPopup Pro](https://img.shields.io/polymart/version/4921?style=for-the-badge&label=AntiPopup%20Pro&color=%2346a190)](https://polymart.org/resource/antipopup-pro.4921)
