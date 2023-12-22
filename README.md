@@ -1,7 +1,7 @@
 **For faster updates, priority support and a discord role purchase AntiPopup Pro on Polymart.**  
 Click the button below for more details.
 
-[![AntiPopup Pro](https://img.shields.io/polymart/version/4921?style=for-the-badge&label=AntiPopup%20Pro&color=%2346a190)](https://polymart.org/resource/antipopup-pro.4921)
+[<img src="https://images.polymart.org/resource/4921/default.jpg" width="480" alt="Download AntiPopup Pro on Polymart.org" title="Download AntiPopup Pro on Polymart.org">](https://polymart.org/resource/antipopup-pro.4921?utm_source=product-materials-image&utm_medium=referral&utm_campaign=product-4921-materials-image-default&utm_content=product-4921-user-1488-markdown)
 
 **What is this plugin?** \
 AntiPopup is a plugin aiming to remove chat reporting system entirely using packets. It also has unique feature - blocks the new annoying popup (below) even if your server doesn't enforce chat reporting (please don't enforce it). \
