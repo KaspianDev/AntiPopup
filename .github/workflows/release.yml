@@ -44,7 +44,7 @@ jobs:
           build/libs/*-dev-all.jar
 
     - name: Generate Checksum
-      uses: jmgilman/actions-generate-checksum@v1.0.0
+      uses: jmgilman/actions-generate-checksum@v1.0.1
       with:
         method: md5
         patterns: build/libs/AntiPopup-*.jar
