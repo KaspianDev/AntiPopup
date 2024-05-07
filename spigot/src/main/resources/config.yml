@@ -1,0 +1,42 @@
+config-version: 33
+
+# Should we collect anonymous data about your server?
+# false by default.
+bstats: false
+
+# Should we remove [Not Secure] from /say?
+# There is a very small chance of catching something
+# that should not be caught. If that happens report the
+# incident to Github issues of AntiPopup.
+filter-not-secure: true
+
+# We dont need that packet if
+# we dont sign messages.
+send-header: false
+
+# Should setup be ran on first start?
+# Useful for all kinds of setups or server hosts.
+auto-setup: false
+
+# Should reporting chat messages be prevented?
+# Only works for versions above 1.19(.0).
+block-chat-reports: true
+
+# Should popup appear for players?
+# Not recommended.
+show-popup: false
+
+# --- SPIGOT ONLY ---
+# Readd clickable URLs in messages.
+# Could cause incompabilities!
+clickable-urls: false
+
+# --- SPIGOT ONLY ---
+# Location of server.properties file relative to server's folder.
+# Do not change unless needed.
+properties-location: server.properties
+
+# Do not touch ones below!
+first-run: true
+ask-bstats: true
+setup-mode: true

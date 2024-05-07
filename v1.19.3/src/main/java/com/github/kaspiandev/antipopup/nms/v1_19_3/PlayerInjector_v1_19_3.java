@@ -1,6 +1,6 @@
 package com.github.kaspiandev.antipopup.nms.v1_19_3;
 
-import com.github.kaspiandev.antipopup.nms.AbstractInjector;
+import com.github.kaspiandev.antipopup.spigot.nms.PacketInjector;
 import io.netty.channel.*;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class PlayerInjector_v1_19_3 implements AbstractInjector {
+public class PlayerInjector_v1_19_3 implements PacketInjector {
 
     private static final String HANDLER_NAME = "antipopup_handler";
 

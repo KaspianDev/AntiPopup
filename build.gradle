@@ -1,10 +1,12 @@
 plugins {
     id "java"
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "io.github.goooler.shadow" version "${shadowVer}"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.0.1"
 }
 
 dependencies {
-    implementation project(path: ":main", configuration: "shadow")
+    implementation project(path: ":spigot", configuration: "shadow")
+    implementation project(path: ":velocity", configuration: "shadow")
 }
 
 tasks {
@@ -18,7 +20,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "7.3"
+    version = "8"
 
     repositories {
         mavenCentral()
@@ -34,6 +36,10 @@ allprojects {
         maven {
             name = "No."
             url = "https://repo.viaversion.com"
+        }
+        maven {
+            name = "codemc"
+            url = "https://repo.codemc.io/repository/maven-releases/"
         }
     }
 }

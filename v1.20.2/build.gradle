@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     compileOnly project(path: ":shared")
+    compileOnly project(path: ":nms")
 
     paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.20.2-R0.1-SNAPSHOT"
+    compileOnly "net.kyori:adventure-platform-bukkit:4.3.1"
 }
