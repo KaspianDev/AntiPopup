@@ -1,0 +1,50 @@
+plugins {
+    id "java"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.0.1"
+    id "io.github.goooler.shadow" version "${shadowVer}"
+}
+
+repositories {
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+}
+
+dependencies {
+    compileOnly "com.velocitypowered:velocity-api:3.2.0-SNAPSHOT"
+    annotationProcessor "com.velocitypowered:velocity-api:3.2.0-SNAPSHOT"
+
+    implementation project(path: ":shared")
+    implementation files("../lib/packetevents-velocity-2.2.1.jar")
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        minimize()
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
+        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
+    }
+}
+
+def templateSource = file("src/main/templates")
+def templateDest = layout.buildDirectory.dir("generated/sources/templates")
+def generateTemplates = tasks.register("generateTemplates", Copy) { task ->
+    def props = [
+            "version": project.version
+    ]
+    task.inputs.properties props
+
+    task.from templateSource
+    task.into templateDest
+    task.expand props
+}
+
+sourceSets.main.java.srcDir(generateTemplates.map { it.outputs })
+
+rootProject.idea.project.settings.taskTriggers.afterSync generateTemplates

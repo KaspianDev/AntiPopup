@@ -6,4 +6,5 @@ pluginManagement {
 }
 
 rootProject.name = "AntiPopup"
-include "main", "shared", "v1.19.2", "v1.19.3", "v1.19.4", "v1.20", "v1.20.2", "v1.20.3"
+include "spigot", "shared", "nms", "v1.19.2", "v1.19.3", "v1.19.4", "v1.20.1", "v1.20.2", "v1.20.4", "v1.20.6", "velocity"
+

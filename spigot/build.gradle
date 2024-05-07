@@ -1,0 +1,65 @@
+plugins {
+    id "java"
+    id "io.github.goooler.shadow" version "${shadowVer}"
+}
+
+repositories {
+    maven {
+        name = "devmart-other"
+        url = "https://nexuslite.gcnt.net/repos/other/"
+    }
+}
+
+dependencies {
+    implementation project(path: ":shared")
+    implementation project(path: ":nms")
+    implementation project(path: ":v1.19.2", configuration: "reobf")
+    implementation project(path: ":v1.19.3", configuration: "reobf")
+    implementation project(path: ":v1.19.4", configuration: "reobf")
+    implementation project(path: ":v1.20.1", configuration: "reobf")
+    implementation project(path: ":v1.20.2", configuration: "reobf")
+    implementation project(path: ":v1.20.4", configuration: "reobf")
+    implementation project(path: ":v1.20.6", configuration: "reobf")
+
+    compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+    compileOnly "com.viaversion:viaversion:4.6.1"
+    compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
+
+    implementation "org.bstats:bstats-bukkit:3.0.0"
+    implementation files("../lib/packetevents-spigot-2.2.1.jar")
+    implementation "com.tcoded:FoliaLib:0.2.3"
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        minimize()
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
+        relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
+        relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")
+    }
+}
+
+def targetJavaVersion = 21
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset "UTF-8"
+    filesMatching("plugin.yml") {
+        expand props
+    }
+}

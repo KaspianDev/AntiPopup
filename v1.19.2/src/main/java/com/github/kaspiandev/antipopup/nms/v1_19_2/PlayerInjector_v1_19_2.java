@@ -1,6 +1,6 @@
 package com.github.kaspiandev.antipopup.nms.v1_19_2;
 
-import com.github.kaspiandev.antipopup.nms.AbstractInjector;
+import com.github.kaspiandev.antipopup.spigot.nms.PacketInjector;
 import io.netty.channel.*;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class PlayerInjector_v1_19_2 implements AbstractInjector {
+public class PlayerInjector_v1_19_2 implements PacketInjector {
 
     private static final String HANDLER_NAME = "antipopup_handler";
 
@@ -25,7 +25,7 @@ public class PlayerInjector_v1_19_2 implements AbstractInjector {
             public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
                 if (packet instanceof ClientboundPlayerChatPacket chatPacket) {
                     Component content = chatPacket.message().unsignedContent()
-                            .orElse(chatPacket.message().serverContent());
+                                                  .orElse(chatPacket.message().serverContent());
                     Optional<ChatType.Bound> chatType = chatPacket.chatType().resolve(
                             ((CraftServer) Bukkit.getServer()).getServer().registryAccess());
 

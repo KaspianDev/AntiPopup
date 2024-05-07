@@ -1,0 +1,19 @@
+name: AntiPopup
+version: '${version}'
+main: com.github.kaspiandev.antipopup.spigot.AntiPopup
+api-version: 1.17
+load: POSTWORLD
+softdepend:
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
+authors: [ Kaspian ]
+description: A plugin that removed annoying unsafe server popup.
+commands:
+  antipopup:
+    description: Main antipopup command.
+    permission: antipopup.commands
+folia-supported: true

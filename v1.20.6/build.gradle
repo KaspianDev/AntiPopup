@@ -1,0 +1,11 @@
+plugins {
+    id "java"
+    id "io.papermc.paperweight.userdev" version "${userdevVer}"
+}
+
+dependencies {
+    compileOnly project(path: ":shared")
+    compileOnly project(path: ":nms")
+
+    paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.20.6-R0.1-SNAPSHOT"
+}
