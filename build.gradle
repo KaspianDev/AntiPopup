@@ -20,7 +20,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "8"
+    version = "8.1"
 
     repositories {
         mavenCentral()
@@ -41,6 +41,11 @@ allprojects {
             name = "codemc"
             url = "https://repo.codemc.io/repository/maven-releases/"
         }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

@@ -12,9 +12,13 @@ import com.github.kaspiandev.antipopup.nms.v1_20_2.PlayerInjector_v1_20_2;
 import com.github.kaspiandev.antipopup.nms.v1_20_4.PlayerInjector_v1_20_4;
 import com.github.kaspiandev.antipopup.nms.v1_20_6.PlayerInjector_v1_20_6;
 import com.github.kaspiandev.antipopup.spigot.api.Api;
+import com.github.kaspiandev.antipopup.spigot.hook.HookManager;
+import com.github.kaspiandev.antipopup.spigot.hook.viaversion.ViaVersionHook;
+import com.github.kaspiandev.antipopup.spigot.hook.viaversion.Via_1_20_4_to_1_20_5;
 import com.github.kaspiandev.antipopup.spigot.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.spigot.nms.PlayerListener;
 import com.github.kaspiandev.antipopup.spigot.platform.SpigotPlatform;
+import com.github.kaspiandev.antipopup.spigot.hook.viaversion.Via_1_19_to_1_19_1;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -30,7 +34,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +42,7 @@ import static org.bukkit.Bukkit.getPluginManager;
 
 public final class AntiPopup extends JavaPlugin {
 
+    private static AntiPopup instance;
     private static File propertiesFile;
     private static APConfig config;
     private static FoliaLib foliaLib;
@@ -51,8 +55,13 @@ public final class AntiPopup extends JavaPlugin {
         return propertiesFile;
     }
 
+    public static AntiPopup getInstance() {
+        return instance;
+    }
+
     @Override
     public void onLoad() {
+        instance = this;
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().getSettings().debug(false).bStats(false).checkForUpdates(false);
         PacketEvents.getAPI().load();
@@ -79,17 +88,15 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().info("Loaded optional metrics.");
         }
 
-        if (getPluginManager().getPlugin("ViaVersion") != null
-                && PacketEvents.getAPI().getServerManager().getVersion().equals(ServerVersion.V_1_19)) {
-            try {
-                var hookClass = ViaHook.class;
-                hookClass.getConstructor().newInstance();
-                getLogger().info("Enabled 1.19 ViaVersion Hook.");
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                     NoSuchMethodException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+        ServerManager serverManager = PacketEvents.getAPI().getServerManager();
+        PluginManager pluginManager = getPluginManager();
+
+        HookManager hookManager = new HookManager();
+        ViaVersionHook viaVersionHook = new ViaVersionHook();
+        viaVersionHook.addModifier(Via_1_19_to_1_19_1.class);
+        viaVersionHook.addModifier(Via_1_20_4_to_1_20_5.class);
+        hookManager.addHook(viaVersionHook);
+        hookManager.load();
 
         if (config.isClickableUrls()) {
             getServer().getPluginManager().registerEvents(new ChatListener(), this);
@@ -99,9 +106,6 @@ public final class AntiPopup extends JavaPlugin {
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(spigotPlatform));
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
-
-        PluginManager pluginManager = getServer().getPluginManager();
-        ServerManager serverManager = PacketEvents.getAPI().getServerManager();
 
         if (config.isBlockChatReports()
                 && serverManager.getVersion().isOlderThan(ServerVersion.V_1_19_1)) {
