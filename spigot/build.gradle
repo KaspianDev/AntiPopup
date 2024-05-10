@@ -22,7 +22,7 @@ dependencies {
     implementation project(path: ":v1.20.6", configuration: "reobf")
 
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
-    compileOnly "com.viaversion:viaversion:4.6.1"
+    compileOnly "com.viaversion:viaversion:4.10.1"
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
@@ -41,17 +41,6 @@ tasks {
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
         relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")
-    }
-}
-
-def targetJavaVersion = 21
-
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
 }
 
