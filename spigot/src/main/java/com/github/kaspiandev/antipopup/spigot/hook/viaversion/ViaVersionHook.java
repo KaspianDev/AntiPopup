@@ -7,8 +7,8 @@ import com.github.retrooper.packetevents.manager.server.ServerVersion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class ViaVersionHook implements Hook {
 
@@ -32,19 +32,19 @@ public class ViaVersionHook implements Hook {
     @Override
     public void register() {
         ServerVersion serverVersion = PacketEvents.getAPI().getServerManager().getVersion();
-        for (Class<? extends ViaProtocolModifier<?>> modifier : modifiers) {
+        Iterator<Class<? extends ViaProtocolModifier<?>>> iterator = modifiers.iterator();
+        while (iterator.hasNext())
             try {
+                Class<? extends ViaProtocolModifier<?>> modifier = iterator.next();
                 ViaProtocolModifier<?> modifierInstance = modifier.getDeclaredConstructor().newInstance();
 
                 if (serverVersion.is(modifierInstance.getComparison(), modifierInstance.getVersion())) {
                     modifierInstance.modify();
                     registeredModifiers.add(modifierInstance);
-                    modifiers.remove(modifier);
                     AntiPopup.getInstance().getLogger().info(() -> getRegisteredMessage(modifierInstance));
                 }
             } catch (IllegalAccessException | InvocationTargetException
                      | NoSuchMethodException | InstantiationException ignored) {}
-        }
     }
 
     private String getRegisteredMessage(ViaProtocolModifier<?> modifier) {

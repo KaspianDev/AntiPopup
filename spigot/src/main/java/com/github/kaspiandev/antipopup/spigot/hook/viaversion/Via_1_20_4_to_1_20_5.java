@@ -15,25 +15,7 @@ public class Via_1_20_4_to_1_20_5 extends ViaProtocolModifier<Protocol1_20_5To1_
     @Override
     public void modify() {
         protocol.appendClientbound(ClientboundPackets1_20_3.JOIN_GAME, (wrapper) -> {
-            wrapper.passthrough(Type.INT); // Entity ID
-            wrapper.passthrough(Type.BOOLEAN); // Hardcore
-            wrapper.passthrough(Type.STRING_ARRAY); // World List
-            wrapper.passthrough(Type.VAR_INT); // Max players
-            wrapper.passthrough(Type.VAR_INT); // View distance
-            wrapper.passthrough(Type.VAR_INT); // Simulation distance
-            wrapper.passthrough(Type.BOOLEAN); // Reduced debug info
-            wrapper.passthrough(Type.BOOLEAN); // Show death screen
-            wrapper.passthrough(Type.BOOLEAN); // Limited crafting
-            wrapper.passthrough(Type.VAR_INT); // Dimension
-            wrapper.passthrough(Type.STRING); // World
-            wrapper.passthrough(Type.LONG); // Seed
-            wrapper.passthrough(Type.BYTE); // Gamemode
-            wrapper.passthrough(Type.BYTE); // Previous gamemode
-            wrapper.passthrough(Type.BOOLEAN); // Debug
-            wrapper.passthrough(Type.BOOLEAN); // Flat
-            wrapper.passthrough(Type.OPTIONAL_GLOBAL_POSITION); // Last death location
-            wrapper.passthrough(Type.VAR_INT); // Portal cooldown
-            wrapper.write(Type.BOOLEAN, true); // Enforces secure chat
+            wrapper.set(Type.BOOLEAN, 6, true); // Enforces secure chat
         });
     }
 

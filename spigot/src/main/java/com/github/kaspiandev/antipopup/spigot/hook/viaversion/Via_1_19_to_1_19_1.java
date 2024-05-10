@@ -15,10 +15,7 @@ public class Via_1_19_to_1_19_1 extends ViaProtocolModifier<Protocol1_19_1To1_19
     @Override
     public void modify() {
         protocol.appendClientbound(ClientboundPackets1_19.SERVER_DATA, (wrapper) -> {
-            wrapper.passthrough(Type.OPTIONAL_COMPONENT);
-            wrapper.passthrough(Type.OPTIONAL_STRING);
-            wrapper.passthrough(Type.BOOLEAN);
-            wrapper.write(Type.BOOLEAN, true);
+            wrapper.set(Type.BOOLEAN, 1, true);
         });
     }
 
