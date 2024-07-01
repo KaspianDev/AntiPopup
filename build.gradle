@@ -20,7 +20,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "8.1"
+    version = "9"
 
     repositories {
         mavenCentral()
@@ -43,10 +43,6 @@ allprojects {
         }
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 }
 
 tasks.register("buildAndMove", Copy) {

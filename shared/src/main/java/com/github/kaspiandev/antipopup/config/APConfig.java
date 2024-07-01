@@ -84,6 +84,10 @@ public class APConfig {
         return document.getBoolean("show-popup");
     }
 
+    public boolean isExperimentalMode() {
+        return document.getOptionalBoolean("experimental-mode").orElse(false);
+    }
+
     public void save() {
         try {
             document.save();

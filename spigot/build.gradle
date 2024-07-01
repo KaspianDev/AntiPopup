@@ -20,14 +20,21 @@ dependencies {
     implementation project(path: ":v1.20.2", configuration: "reobf")
     implementation project(path: ":v1.20.4", configuration: "reobf")
     implementation project(path: ":v1.20.6", configuration: "reobf")
+    implementation project(path: ":v1.21", configuration: "reobf")
 
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
-    compileOnly "com.viaversion:viaversion:4.10.1"
+    compileOnly "com.viaversion:viaversion:5.0.1"
     compileOnly "org.apache.logging.log4j:log4j-core:2.19.0"
 
     implementation "org.bstats:bstats-bukkit:3.0.0"
-    implementation files("../lib/packetevents-spigot-2.2.1.jar")
+    implementation "com.github.retrooper:packetevents-spigot:${packetEventsVer}"
     implementation "com.tcoded:FoliaLib:0.2.3"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks {
