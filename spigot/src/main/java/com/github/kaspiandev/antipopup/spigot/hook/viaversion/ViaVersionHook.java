@@ -4,6 +4,8 @@ import com.github.kaspiandev.antipopup.spigot.AntiPopup;
 import com.github.kaspiandev.antipopup.spigot.hook.Hook;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.viaversion.viaversion.ViaVersionPlugin;
+import com.viaversion.viaversion.api.Via;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -31,6 +33,9 @@ public class ViaVersionHook implements Hook {
 
     @Override
     public void register() {
+        if (Via.getAPI().getVersion().startsWith("4")) {
+            throw new IllegalStateException("ViaVersion 4 is not supported anymore. Update to ViaVersion 5 for hooks to work!");
+        }
         ServerVersion serverVersion = PacketEvents.getAPI().getServerManager().getVersion();
         Iterator<Class<? extends ViaProtocolModifier<?>>> iterator = modifiers.iterator();
         while (iterator.hasNext())

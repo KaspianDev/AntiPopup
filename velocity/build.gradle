@@ -16,7 +16,7 @@ dependencies {
     annotationProcessor "com.velocitypowered:velocity-api:3.2.0-SNAPSHOT"
 
     implementation project(path: ":shared")
-    implementation files("../lib/packetevents-velocity-2.2.1.jar")
+    implementation "com.github.retrooper:packetevents-velocity:${packetEventsVer}"
 }
 
 tasks {
@@ -29,6 +29,12 @@ tasks {
         relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 

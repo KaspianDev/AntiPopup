@@ -11,3 +11,9 @@ dependencies {
     pluginRemapper "net.fabricmc:tiny-remapper:${tinyRemapperVer}:fat"
     compileOnly "net.kyori:adventure-platform-bukkit:4.3.1"
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}

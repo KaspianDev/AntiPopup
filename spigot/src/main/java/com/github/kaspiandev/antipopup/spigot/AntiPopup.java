@@ -11,14 +11,15 @@ import com.github.kaspiandev.antipopup.nms.v1_20_1.PlayerInjector_v1_20_1;
 import com.github.kaspiandev.antipopup.nms.v1_20_2.PlayerInjector_v1_20_2;
 import com.github.kaspiandev.antipopup.nms.v1_20_4.PlayerInjector_v1_20_4;
 import com.github.kaspiandev.antipopup.nms.v1_20_6.PlayerInjector_v1_20_6;
+import com.github.kaspiandev.antipopup.nms.v1_21.PlayerInjector_v1_21;
 import com.github.kaspiandev.antipopup.spigot.api.Api;
 import com.github.kaspiandev.antipopup.spigot.hook.HookManager;
 import com.github.kaspiandev.antipopup.spigot.hook.viaversion.ViaVersionHook;
+import com.github.kaspiandev.antipopup.spigot.hook.viaversion.Via_1_19_to_1_19_1;
 import com.github.kaspiandev.antipopup.spigot.hook.viaversion.Via_1_20_4_to_1_20_5;
 import com.github.kaspiandev.antipopup.spigot.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.spigot.nms.PlayerListener;
 import com.github.kaspiandev.antipopup.spigot.platform.SpigotPlatform;
-import com.github.kaspiandev.antipopup.spigot.hook.viaversion.Via_1_19_to_1_19_1;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
@@ -63,7 +64,7 @@ public final class AntiPopup extends JavaPlugin {
     public void onLoad() {
         instance = this;
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().getSettings().debug(false).bStats(false).checkForUpdates(false);
+        PacketEvents.getAPI().getSettings().debug(false).checkForUpdates(false);
         PacketEvents.getAPI().load();
         getLogger().info("Loaded PacketEvents.");
     }
@@ -115,27 +116,32 @@ public final class AntiPopup extends JavaPlugin {
         }
 
         if (config.isBlockChatReports()) {
-            PlayerListener playerListener = switch (serverManager.getVersion()) {
-                case V_1_20_5, V_1_20_6 -> new PlayerListener(new PlayerInjector_v1_20_6());
-                case V_1_20_3, V_1_20_4 -> new PlayerListener(new PlayerInjector_v1_20_4());
-                case V_1_20_2 -> new PlayerListener(new PlayerInjector_v1_20_2());
-                case V_1_20, V_1_20_1 -> new PlayerListener(new PlayerInjector_v1_20_1());
-                case V_1_19_4 -> new PlayerListener(new PlayerInjector_v1_19_4());
-                case V_1_19_3 -> new PlayerListener(new PlayerInjector_v1_19_3());
-                case V_1_19_1, V_1_19_2 -> new PlayerListener(new PlayerInjector_v1_19_2());
-                default -> throw new IllegalStateException("No valid injector found for the server version!");
-            };
+            if (!config.isExperimentalMode()) {
+                PlayerListener playerListener = switch (serverManager.getVersion()) {
+                    case V_1_21 -> new PlayerListener(new PlayerInjector_v1_21());
+                    case V_1_20_5, V_1_20_6 -> new PlayerListener(new PlayerInjector_v1_20_6());
+                    case V_1_20_3, V_1_20_4 -> new PlayerListener(new PlayerInjector_v1_20_4());
+                    case V_1_20_2 -> new PlayerListener(new PlayerInjector_v1_20_2());
+                    case V_1_20, V_1_20_1 -> new PlayerListener(new PlayerInjector_v1_20_1());
+                    case V_1_19_4 -> new PlayerListener(new PlayerInjector_v1_19_4());
+                    case V_1_19_3 -> new PlayerListener(new PlayerInjector_v1_19_3());
+                    case V_1_19_1, V_1_19_2 -> new PlayerListener(new PlayerInjector_v1_19_2());
+                    default -> throw new IllegalStateException("No valid injector found for the server version!");
+                };
 
-            pluginManager.registerEvents(playerListener, this);
-            getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
-
-            Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister(config));
-            getLogger().info("Commands registered.");
-
-            if (config.isFilterNotSecure()) {
-                ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
-                getLogger().info("Logger filter enabled.");
+                pluginManager.registerEvents(playerListener, this);
+                getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
+            } else {
+                getLogger().info("Experimental mode is on");
             }
+        }
+
+        Objects.requireNonNull(this.getCommand("antipopup")).setExecutor(new CommandRegister(config));
+        getLogger().info("Commands registered.");
+
+        if (config.isFilterNotSecure()) {
+            ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new LogFilter());
+            getLogger().info("Logger filter enabled.");
         }
 
         foliaLib.getImpl().runLater(() -> {
