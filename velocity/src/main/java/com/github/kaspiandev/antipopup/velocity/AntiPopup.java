@@ -43,7 +43,7 @@ public class AntiPopup {
 
         PluginContainer pluginContainer = server.getPluginManager().ensurePluginContainer(this);
         PacketEvents.setAPI(VelocityPacketEventsBuilder.build(server, pluginContainer, logger, dataDirectory));
-        PacketEvents.getAPI().getSettings().debug(false).bStats(false).checkForUpdates(false);
+        PacketEvents.getAPI().getSettings().debug(false).checkForUpdates(false);
         PacketEvents.getAPI().load();
         PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(platform));
         PacketEvents.getAPI().init();
