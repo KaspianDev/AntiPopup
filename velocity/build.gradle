@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly "com.velocitypowered:velocity-api:3.2.0-SNAPSHOT"
-    annotationProcessor "com.velocitypowered:velocity-api:3.2.0-SNAPSHOT"
+    compileOnly "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
+    annotationProcessor "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
 
     implementation project(path: ":shared")
     implementation "com.github.retrooper:packetevents-velocity:${packetEventsVer}"
@@ -25,8 +25,8 @@ tasks {
     }
     shadowJar {
         minimize()
-        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
-        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents.velocity")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents.api")
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
     }

@@ -21,6 +21,7 @@ import com.github.kaspiandev.antipopup.spigot.listeners.ChatListener;
 import com.github.kaspiandev.antipopup.spigot.nms.PlayerListener;
 import com.github.kaspiandev.antipopup.spigot.platform.SpigotPlatform;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.manager.server.ServerManager;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.tcoded.folialib.FoliaLib;
@@ -104,7 +105,7 @@ public final class AntiPopup extends JavaPlugin {
             getLogger().info("Enabled URL support.");
         }
 
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(spigotPlatform));
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(spigotPlatform), PacketListenerPriority.LOW);
         PacketEvents.getAPI().init();
         getLogger().info("Initiated PacketEvents.");
 

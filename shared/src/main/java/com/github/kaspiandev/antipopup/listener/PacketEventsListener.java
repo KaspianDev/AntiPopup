@@ -1,10 +1,7 @@
 package com.github.kaspiandev.antipopup.listener;
 
 import com.github.kaspiandev.antipopup.platform.Platform;
-import com.github.retrooper.packetevents.event.PacketListenerAbstract;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
-import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.event.*;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -13,12 +10,11 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSe
 import com.github.retrooper.packetevents.wrapper.status.server.WrapperStatusServerResponse;
 import com.google.gson.JsonObject;
 
-public class PacketEventsListener extends PacketListenerAbstract {
+public class PacketEventsListener implements PacketListener {
 
     private final Platform platform;
 
     public PacketEventsListener(Platform platform) {
-        super(PacketListenerPriority.LOW);
         this.platform = platform;
     }
 

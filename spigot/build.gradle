@@ -43,8 +43,8 @@ tasks {
     }
     shadowJar {
         minimize()
-        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
-        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents")
+        relocate("io.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents.spigot")
+        relocate("com.github.retrooper.packetevents", "com.github.kaspiandev.antipopup.libs.packetevents.api")
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
         relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")

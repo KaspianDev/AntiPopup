@@ -4,6 +4,7 @@ import com.github.kaspiandev.antipopup.config.APConfig;
 import com.github.kaspiandev.antipopup.listener.PacketEventsListener;
 import com.github.kaspiandev.antipopup.velocity.platform.VelocityPlatform;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "antipopup",
         name = "AntiPopup",
+        authors = "KaspianDev",
         version = BuildConstants.VERSION
 )
 public class AntiPopup {
@@ -45,7 +47,7 @@ public class AntiPopup {
         PacketEvents.setAPI(VelocityPacketEventsBuilder.build(server, pluginContainer, logger, dataDirectory));
         PacketEvents.getAPI().getSettings().debug(false).checkForUpdates(false);
         PacketEvents.getAPI().load();
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(platform));
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketEventsListener(platform), PacketListenerPriority.LOW);
         PacketEvents.getAPI().init();
     }
 
