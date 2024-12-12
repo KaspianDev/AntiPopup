@@ -13,6 +13,7 @@ import com.github.kaspiandev.antipopup.nms.v1_20_4.PlayerInjector_v1_20_4;
 import com.github.kaspiandev.antipopup.nms.v1_20_6.PlayerInjector_v1_20_6;
 import com.github.kaspiandev.antipopup.nms.v1_21.PlayerInjector_v1_21;
 import com.github.kaspiandev.antipopup.nms.v1_21_2.PlayerInjector_v1_21_2;
+import com.github.kaspiandev.antipopup.nms.v1_21_4.PlayerInjector_v1_21_4;
 import com.github.kaspiandev.antipopup.spigot.api.Api;
 import com.github.kaspiandev.antipopup.spigot.hook.HookManager;
 import com.github.kaspiandev.antipopup.spigot.hook.viaversion.ViaVersionHook;
@@ -120,6 +121,7 @@ public final class AntiPopup extends JavaPlugin {
         if (config.isBlockChatReports()) {
             if (!config.isExperimentalMode()) {
                 PlayerListener playerListener = switch (serverManager.getVersion()) {
+                    case V_1_21_4 -> new PlayerListener(new PlayerInjector_v1_21_4());
                     case V_1_21_2, V_1_21_3 -> new PlayerListener(new PlayerInjector_v1_21_2());
                     case V_1_21, V_1_21_1 -> new PlayerListener(new PlayerInjector_v1_21());
                     case V_1_20_5, V_1_20_6 -> new PlayerListener(new PlayerInjector_v1_20_6());
