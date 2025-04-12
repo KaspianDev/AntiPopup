@@ -1,0 +1,21 @@
+plugins {
+    id "java"
+    id "io.papermc.paperweight.userdev" version "${userdevVer}"
+}
+
+dependencies {
+    compileOnly project(path: ":shared")
+    compileOnly project(path: ":nms")
+
+    paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.21.5-R0.1-SNAPSHOT"
+    pluginRemapper "net.fabricmc:tiny-remapper:${tinyRemapperVer}:fat"
+}
+
+java {
+    disableAutoTargetJvm()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
