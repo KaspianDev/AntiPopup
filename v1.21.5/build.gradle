@@ -8,7 +8,7 @@ dependencies {
     compileOnly project(path: ":nms")
 
     paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.21.5-R0.1-SNAPSHOT"
-    pluginRemapper "net.fabricmc:tiny-remapper:0.11.1:fat"
+    //pluginRemapper "net.fabricmc:tiny-remapper:0.11.1:fat"
 }
 
 java {
