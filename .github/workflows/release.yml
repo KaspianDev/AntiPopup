@@ -58,7 +58,7 @@ jobs:
     #    GITHUB_TOKEN: ${{ github.token }}
         
     - name: Upload artifacts & release assets
-      uses: nanoufo/action-upload-artifacts-and-release-assets@v1.4
+      uses: nanoufo/action-upload-artifacts-and-release-assets@v2.0
       with:
         path: build/libs/AntiPopup-*.jar
         release-upload-url: ${{ steps.release.outputs.upload_url }}
