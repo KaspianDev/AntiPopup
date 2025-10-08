@@ -25,6 +25,7 @@ dependencies {
     implementation project(path: ":v1.21.4", configuration: "reobf")
     implementation project(path: ":v1.21.5", configuration: "reobf")
     implementation project(path: ":v1.21.6", configuration: "reobf")
+    implementation project(path: ":v1.21.9", configuration: "reobf")
 
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
     compileOnly "com.viaversion:viaversion:5.4.0"
