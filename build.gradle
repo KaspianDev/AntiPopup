@@ -20,7 +20,7 @@ tasks {
 
 allprojects {
     group = "com.github.kaspiandev.antipopup"
-    version = "12.2"
+    version = "12.3"
 
     repositories {
         mavenCentral()
