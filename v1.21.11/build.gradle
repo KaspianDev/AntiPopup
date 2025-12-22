@@ -1,0 +1,31 @@
+plugins {
+    id "java"
+    id "io.papermc.paperweight.userdev" version "${userdevVer}"
+}
+
+dependencies {
+    compileOnly project(path: ":shared")
+    compileOnly project(path: ":nms")
+
+    paperweightDevelopmentBundle "io.papermc.paper:dev-bundle:1.21.11-R0.1-SNAPSHOT"
+}
+
+java {
+    disableAutoTargetJvm()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Configure jar manifest to indicate Mojang mappings
+// This tells Paper that the plugin is already Mojang-mapped and doesn't need reobf
+tasks.named("jar") {
+    manifest {
+        attributes([
+            "paperweight-mappings-namespace": "mojang"
+        ])
+    }
+}
+

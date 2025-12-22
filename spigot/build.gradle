@@ -26,6 +26,8 @@ dependencies {
     implementation project(path: ":v1.21.5", configuration: "reobf")
     implementation project(path: ":v1.21.6", configuration: "reobf")
     implementation project(path: ":v1.21.9", configuration: "reobf")
+    compileOnly project(path: ":v1.21.11")
+    implementation project(path: ":v1.21.11", configuration: "default")
 
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
     compileOnly "com.viaversion:viaversion:5.4.0"
@@ -53,6 +55,12 @@ tasks {
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
         relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")
+        
+        manifest {
+            attributes([
+                "paperweight-mappings-namespace": "mojang"
+            ])
+        }
     }
 }
 
