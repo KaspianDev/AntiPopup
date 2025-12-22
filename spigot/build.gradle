@@ -54,12 +54,6 @@ tasks {
         relocate("net.kyori", "com.github.kaspiandev.antipopup.libs.kyori")
         relocate("org.bstats", "com.github.kaspiandev.antipopup.libs.bstats")
         relocate("com.tcoded.folialib", "com.github.kaspiandev.antipopup.libs.folialib")
-        
-        manifest {
-            attributes([
-                "paperweight-mappings-namespace": "mojang"
-            ])
-        }
     }
 }
 
