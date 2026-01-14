@@ -21,11 +21,10 @@ java {
 
 // Configure jar manifest to indicate Mojang mappings
 // This tells Paper that the plugin is already Mojang-mapped and doesn't need reobf
-tasks.named("jar") {
-    manifest {
-        attributes([
-            "paperweight-mappings-namespace": "mojang"
-        ])
-    }
-}
-
+//tasks.named("jar") {
+//    manifest {
+//        attributes([
+//            "paperweight-mappings-namespace": "mojang"
+//        ])
+//    }
+//}
