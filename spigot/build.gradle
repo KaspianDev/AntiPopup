@@ -3,6 +3,8 @@ plugins {
     id "com.gradleup.shadow" version "${shadowVer}"
 }
 
+version = "${rootProject.version}-compat.1"
+
 repositories {
     maven {
         name = "devmart-other"

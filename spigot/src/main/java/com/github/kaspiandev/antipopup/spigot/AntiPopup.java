@@ -4,6 +4,8 @@ import com.github.kaspiandev.antipopup.config.APConfig;
 import com.github.kaspiandev.antipopup.listener.PacketEventsListener;
 import com.github.kaspiandev.antipopup.log.LogFilter;
 import com.github.kaspiandev.antipopup.message.ConsoleMessages;
+import com.github.kaspiandev.antipopup.spigot.nms.ReflectivePacketInjector;
+import com.github.kaspiandev.antipopup.spigot.nms.PacketInjector;
 import com.github.kaspiandev.antipopup.nms.v1_19_2.PlayerInjector_v1_19_2;
 import com.github.kaspiandev.antipopup.nms.v1_19_3.PlayerInjector_v1_19_3;
 import com.github.kaspiandev.antipopup.nms.v1_19_4.PlayerInjector_v1_19_4;
@@ -56,6 +58,7 @@ public final class AntiPopup extends JavaPlugin {
     private static File propertiesFile;
     private static APConfig config;
     private static FoliaLib foliaLib;
+    private ReflectivePacketInjector reflectiveInjector;
 
     public static FoliaLib getFoliaLib() {
         return foliaLib;
@@ -118,6 +121,7 @@ public final class AntiPopup extends JavaPlugin {
         getLogger().info("Initiated PacketEvents.");
 
         if (config.isBlockChatReports()
+                && serverManager.getVersion() != ServerVersion.ERROR
                 && serverManager.getVersion().isOlderThan(ServerVersion.V_1_19_1)) {
             config.setBlockChatReports(false);
             ConsoleMessages.log(ConsoleMessages.BLOCKING_REPORTS_UNSUPPORTED, getLogger()::severe);
@@ -126,27 +130,11 @@ public final class AntiPopup extends JavaPlugin {
 
         if (config.isBlockChatReports()) {
             if (!config.isExperimentalMode()) {
-                PlayerListener playerListener = switch (serverManager.getVersion()) {
-                    case V_26_2 -> new PlayerListener(new PlayerInjector_v26_2());
-                    case V_26_1, V_26_1_1, V_26_1_2 -> new PlayerListener(new PlayerInjector_v26_1());
-                    case V_1_21_11 -> new PlayerListener(new PlayerInjector_v1_21_11());
-                    case V_1_21_9, V_1_21_10 -> new PlayerListener(new PlayerInjector_v1_21_9());
-                    case V_1_21_6, V_1_21_7, V_1_21_8 -> new PlayerListener(new PlayerInjector_v1_21_6());
-                    case V_1_21_5 -> new PlayerListener(new PlayerInjector_v1_21_5());
-                    case V_1_21_4 -> new PlayerListener(new PlayerInjector_v1_21_4());
-                    case V_1_21_2, V_1_21_3 -> new PlayerListener(new PlayerInjector_v1_21_2());
-                    case V_1_21, V_1_21_1 -> new PlayerListener(new PlayerInjector_v1_21());
-                    case V_1_20_5, V_1_20_6 -> new PlayerListener(new PlayerInjector_v1_20_6());
-                    case V_1_20_3, V_1_20_4 -> new PlayerListener(new PlayerInjector_v1_20_4());
-                    case V_1_20_2 -> new PlayerListener(new PlayerInjector_v1_20_2());
-                    case V_1_20, V_1_20_1 -> new PlayerListener(new PlayerInjector_v1_20_1());
-                    case V_1_19_4 -> new PlayerListener(new PlayerInjector_v1_19_4());
-                    case V_1_19_3 -> new PlayerListener(new PlayerInjector_v1_19_3());
-                    case V_1_19_1, V_1_19_2 -> new PlayerListener(new PlayerInjector_v1_19_2());
-                    default -> throw new IllegalStateException("No valid injector found for the server version!");
-                };
-
+                PacketInjector injector = createInjector(serverManager.getVersion());
+                PlayerListener playerListener = new PlayerListener(injector);
                 pluginManager.registerEvents(playerListener, this);
+                // Also attach when enabled with players already connected.
+                Bukkit.getOnlinePlayers().forEach(injector::inject);
                 getLogger().info("Hooked on " + serverManager.getVersion().getReleaseName());
             } else {
                 getLogger().info("Experimental mode is on");
@@ -188,8 +176,46 @@ public final class AntiPopup extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (reflectiveInjector != null) reflectiveInjector.close();
         PacketEvents.getAPI().terminate();
         getLogger().info("Disabled PacketEvents.");
+    }
+
+    private PacketInjector createInjector(ServerVersion version) {
+        ReflectiveOperationException discoveryFailure;
+        try {
+            ClassLoader serverLoader = Bukkit.getServer().getClass().getClassLoader();
+            Class<?> craftPlayer = Class.forName(
+                    Bukkit.getServer().getClass().getPackageName() + ".entity.CraftPlayer", false, serverLoader);
+            reflectiveInjector = new ReflectivePacketInjector(craftPlayer, serverLoader, getLogger());
+            getLogger().info("Validated shared chat injector using server capabilities.");
+            return reflectiveInjector;
+        } catch (ReflectiveOperationException ex) {
+            // Older layouts and obfuscated Spigot builds retain their established implementation.
+            discoveryFailure = ex;
+            getLogger().info("Shared chat contract unavailable (" + ex + "); checking legacy adapters.");
+        }
+        return switch (version) {
+            case V_26_2 -> new PlayerInjector_v26_2();
+            case V_26_1, V_26_1_1, V_26_1_2 -> new PlayerInjector_v26_1();
+            case V_1_21_11 -> new PlayerInjector_v1_21_11();
+            case V_1_21_9, V_1_21_10 -> new PlayerInjector_v1_21_9();
+            case V_1_21_6, V_1_21_7, V_1_21_8 -> new PlayerInjector_v1_21_6();
+            case V_1_21_5 -> new PlayerInjector_v1_21_5();
+            case V_1_21_4 -> new PlayerInjector_v1_21_4();
+            case V_1_21_2, V_1_21_3 -> new PlayerInjector_v1_21_2();
+            case V_1_21, V_1_21_1 -> new PlayerInjector_v1_21();
+            case V_1_20_5, V_1_20_6 -> new PlayerInjector_v1_20_6();
+            case V_1_20_3, V_1_20_4 -> new PlayerInjector_v1_20_4();
+            case V_1_20_2 -> new PlayerInjector_v1_20_2();
+            case V_1_20, V_1_20_1 -> new PlayerInjector_v1_20_1();
+            case V_1_19_4 -> new PlayerInjector_v1_19_4();
+            case V_1_19_3 -> new PlayerInjector_v1_19_3();
+            case V_1_19_1, V_1_19_2 -> new PlayerInjector_v1_19_2();
+            default -> throw new IllegalStateException(
+                    "Server chat capabilities changed and no legacy adapter exists for " + version,
+                    discoveryFailure);
+        };
     }
 
 }

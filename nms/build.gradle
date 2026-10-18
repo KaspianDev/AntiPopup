@@ -4,7 +4,14 @@ plugins {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+    compileOnly "io.netty:netty-transport:4.1.118.Final"
+    testImplementation "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+    testImplementation "io.netty:netty-transport:4.1.118.Final"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.11.4"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
+
+tasks.test { useJUnitPlatform() }
 
 java {
     toolchain {
